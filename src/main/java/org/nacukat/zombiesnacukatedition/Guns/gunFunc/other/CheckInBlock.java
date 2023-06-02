@@ -14,8 +14,8 @@ import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.canWallSho
 
 public class CheckInBlock {
     public RayTraceResult checkOppositeLocation(Player player, RayTraceResult rayTraceResult, Location hitLocation) {
-        Vector direction = hitLocation.getDirection();
 
+        Vector direction = hitLocation.getDirection();
         double distance = 0.1;
         double maxDistance = 10000.0; // 最大探索距離（例として100ブロックまでとします）
         Location loc = hitLocation.clone();

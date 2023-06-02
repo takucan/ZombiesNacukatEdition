@@ -3,6 +3,7 @@ package org.nacukat.zombiesnacukatedition.Doors;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -31,12 +32,8 @@ public class openingDoor implements Listener {
                         int z = e.getClickedBlock().getLocation().getBlockZ();
                         World world = player.getWorld();
                         Location point1 = new Location(world,position.get(0).asInt(),position.get(1).asInt(),position.get(2).asInt()); // 指定範囲の1つ目の座標
-                        Location point2; // 指定範囲の2つ目の座標
-                        if(door.get("facing").asInt()==1){
-                            point2 = new Location(world,position.get(0).asInt()-2,position.get(1).asInt()+3,position.get(2).asInt());
-                        }else {
-                            point2 = new Location(world,position.get(0).asInt(),position.get(1).asInt()+3,position.get(2).asInt()-2);
-                        }
+                        Location point2 = new Location(world, door.get("opposite").get(0).asInt(),door.get("opposite").get(1).asInt(),door.get("opposite").get(2).asInt()); // 指定範囲の2つ目の座標
+
 
                         int minX = Math.min(point1.getBlockX(), point2.getBlockX());
                         int minY = Math.min(point1.getBlockY(), point2.getBlockY());
@@ -45,6 +42,7 @@ public class openingDoor implements Listener {
                         int maxY = Math.max(point1.getBlockY(), point2.getBlockY());
                         int maxZ = Math.max(point1.getBlockZ(), point2.getBlockZ());
                         if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ) {
+                            player.playSound(player, Sound.BLOCK_IRON_DOOR_OPEN,1F,1.5F);
                             for (int x1 = minX; x1 <= maxX; x1++) {
                                 for (int y1 = minY; y1 <= maxY; y1++) {
                                     for (int z1 = minZ; z1 <= maxZ; z1++) {

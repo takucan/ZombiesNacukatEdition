@@ -13,6 +13,7 @@ import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.CheckInBlock;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.isCritical;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
 
 import java.util.*;
@@ -50,53 +51,10 @@ public class ZombieZapper {
                     player1.playSound(player, Sound.ITEM_FLINTANDSTEEL_USE, 0.4F, 0.5F);
                 String hitmessage = "§6+15 Gold";
                 boolean intersect = false;
-                RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), player.getLocation().getDirection(), 50.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
+                String critmessage = "§6+20 Gold (Critical Hit)";
 
-                if(rayTraceResult.getHitBlock() != null){
-                    rayTraceResult = new CheckInBlock().checkOppositeLocation(player,rayTraceResult,rayTraceResult.getHitPosition().toLocation(player.getWorld()));
-                }
-                Entity hitEntity = rayTraceResult.getHitEntity();
-                List<LivingEntity> near = new ArrayList<>(player.getLocation().getNearbyLivingEntities(10.0D, entity -> (entity != null && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && entity.getHealth() != 0.0D && entity != player)));
-                near.sort(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
-
-                if (near.size() > 0) {
-                    BoundingBox box1 = player.getBoundingBox();
-                    BoundingBox box2 = near.get(0).getBoundingBox();
-                    box2.expand(0.2D,0D,0.2D);
-                    boolean intersects = (box1.getMinX() <= box2.getMaxX() && box1.getMaxX() >= box2.getMinX() && box1.getMinY() <= box2.getMaxY() && box1.getMaxY() >= box2.getMinY() && box1.getMinZ() <= box2.getMaxZ() && box1.getMaxZ() >= box2.getMinZ());
-                    if (intersects) {
-                        intersect = true;
-                        hitEntity = near.get(0);
-                    }
-                }
-                if (hitEntity != null) {
-                    LivingEntity livingEntity = (LivingEntity)hitEntity;
-                    if (!intersect) {
-                        Location hitLocation = rayTraceResult.getHitPosition().toLocation(player.getWorld());
-                        Location headLocation = livingEntity.getEyeLocation();
-                        boolean isCritical = new isCritical().critical(player, livingEntity, hitLocation, headLocation);
-                        if (isCritical) {
-                            damage *= 1.2D;
-                            hitmessage = "§6+20 Gold (Critical Hit)";
-                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
-                        } else {
-                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
-                        }
-                    } else if (player.getEyeLocation().getDirection().getY() > 0.0D) {
-                        Random random = new Random();
-                        int rand = random.nextInt(100);
-                        if (rand <= 90) {
-                            damage *= 1.2D;
-                            hitmessage = "§6+20 Gold (Critical Hit)";
-                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
-                        }
-                    } else {
-                        player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
-                    }
-                    if (livingEntity.getNoDamageTicks() != 0 || livingEntity.getMaximumNoDamageTicks() != 0) {
-                        livingEntity.setNoDamageTicks(0);
-                        livingEntity.setMaximumNoDamageTicks(0);
-                    }
+                LivingEntity livingEntity = new rayTrace().shoot(player,damage,hitmessage,critmessage,0.5);
+                if(livingEntity != null){
                     int count = 0;
                     List<LivingEntity> entities = new ArrayList<>(livingEntity.getLocation().getNearbyLivingEntities(3.0D, 3.0D, 3.0D));
                     entities.sort(Comparator.comparingDouble(entity -> entity.getLocation().distance(livingEntity.getLocation())));
@@ -109,7 +67,7 @@ public class ZombieZapper {
                                 entities.get(i).setMaximumNoDamageTicks(0);
                             }
                             if (!Arrays.asList(bosses).contains(entities.get(i).getName())) {
-                                org.bukkit.util.Vector velocity = hitEntity.getLocation().subtract(entities.get(i).getLocation()).toVector().multiply(-0.2D);
+                                org.bukkit.util.Vector velocity = livingEntity.getLocation().subtract(entities.get(i).getLocation()).toVector().multiply(-0.2D);
                                 entities.get(i).setVelocity(velocity);
                             }
                             entities.get(i).damage(damage);
@@ -128,16 +86,8 @@ public class ZombieZapper {
                             count--;
                         }
                     }
-                    player.sendMessage(hitmessage);
-                    if (!Arrays.asList(bosses).contains(livingEntity.getName())) {
-                        livingEntity.damage(damage, player);
-                        Vector velocity = player.getLocation().getDirection().multiply(0.5D);
-                        livingEntity.setVelocity(velocity);
-                    } else {
-                        livingEntity.damage(damage);
-                        livingEntity.setKiller(player);
-                    }
                 }
+
                 if (item.getAmount() > 1)
                     item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
