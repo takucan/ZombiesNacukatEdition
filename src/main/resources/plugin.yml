@@ -7,3 +7,4 @@ commands:
   open-shop:
   setmap:
   reload-config:
+  toggle-particles:

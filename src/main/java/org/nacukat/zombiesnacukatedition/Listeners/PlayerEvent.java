@@ -36,6 +36,7 @@ public class PlayerEvent implements Listener {
     public void onPlayerLogin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
         isDown.put(player, Boolean.valueOf(false));
+        showParticle.putIfAbsent(player,true);
         player.sendMessage("" + Kills.keySet() + Kills.keySet());
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();

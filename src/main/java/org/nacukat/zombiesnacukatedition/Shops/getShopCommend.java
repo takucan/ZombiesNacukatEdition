@@ -31,10 +31,7 @@ public class getShopCommend implements CommandExecutor {
     ItemStack FR = new ItemStack(Material.COOKIE);
     if ((HasQF.get(player.getName())).booleanValue()) {
       QF.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-      QF.addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
-      FB.addItemFlags(ItemFlag.HIDE_ENCHANTS);
-      FB.addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
-    }
+      QF.addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);    }
     if(HasFB.get(player.getName())){
       FB.addItemFlags(ItemFlag.HIDE_ENCHANTS);
       FB.addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);

@@ -7,6 +7,9 @@ import org.bukkit.Particle;
 import org.bukkit.entity.Player;
 import org.bukkit.util.Vector;
 
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.isDown;
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.showParticle;
+
 public class spawnParticle {
     public void spawn(Particle particle,Particle.DustOptions dustOptions, Player player){
         Vector direction = player.getEyeLocation().getDirection();
@@ -16,7 +19,12 @@ public class spawnParticle {
         for (double d = distance; d < maxDistance; d += distance) {
             loc = loc.add(direction.multiply(distance));
             if(Bukkit.getWorld("world").getBlockAt(loc).getType().equals(Material.AIR)){
-                player.getWorld().spawnParticle(particle,loc,0,dustOptions);
+                for (Player player1 : Bukkit.getWorld("world").getPlayers()){
+                    if(showParticle.get(player1)){
+                        player1.spawnParticle(particle,loc,0,dustOptions);
+                    }
+                }
+
             }else {
                 break;
             }

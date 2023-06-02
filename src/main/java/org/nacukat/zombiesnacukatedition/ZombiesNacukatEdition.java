@@ -19,6 +19,7 @@ import org.nacukat.zombiesnacukatedition.comands.reloadConfig;
 import org.nacukat.zombiesnacukatedition.comands.revive;
 import org.nacukat.zombiesnacukatedition.comands.setMap;
 import org.nacukat.zombiesnacukatedition.Doors.openingDoor;
+import org.nacukat.zombiesnacukatedition.comands.toggleParticle;
 
 import java.io.File;
 import java.io.IOException;
@@ -66,9 +67,14 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
     public static HashMap<ItemStack, Long> totalbullets = new HashMap<>();
     public static HashMap<String, Long> Kills = new HashMap<>();
 
+    public static HashMap<Player,Boolean> showParticle = new HashMap<>();
     public static JsonNode node = null;
     @Override
     public void onEnable() {
+        for (Player player : Bukkit.getWorld("world").getPlayers()){
+            showParticle.putIfAbsent(player,true);
+        }
+
         ObjectMapper mapper = new ObjectMapper();
         File json = new File(getDataFolder()+"/Config.json");
         try {
@@ -87,6 +93,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getCommand("open-shop").setExecutor(new getShopCommend());
         getCommand("reload-config").setExecutor(new reloadConfig());
         getCommand("setmap").setExecutor(new setMap());
+        getCommand("toggle-particles").setExecutor(new toggleParticle());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");
     }
