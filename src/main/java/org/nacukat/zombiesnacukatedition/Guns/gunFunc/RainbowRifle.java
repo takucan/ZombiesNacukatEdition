@@ -13,10 +13,7 @@ import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.CheckInBlock;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.isCritical;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
 
 import java.util.*;
 
@@ -81,6 +78,7 @@ public class RainbowRifle {
                 boolean intersect = false;
 
                 String critmessage = "§6+7 Gold (Critical Hit)";
+                new spawnParticle().rainbow(player);
 
                 new rayTrace().shoot(player,damage,hitmessage,critmessage,knockBack);
                 if (item.getAmount() > 1)
@@ -111,6 +109,7 @@ public class RainbowRifle {
                             boolean intersect = false;
 
                             String critmessage = "§6+7 Gold (Critical Hit)";
+                            new spawnParticle().rainbow(player);
 
                             new rayTrace().shoot(player,damage,hitmessage,critmessage,knockBack);
                             if (item.getAmount() > 1)

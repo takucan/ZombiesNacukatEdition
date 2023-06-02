@@ -43,7 +43,7 @@ public class CheckInBlock {
 
             // ブロックが存在する場合の処理
             loc = loc.add(direction.multiply(distance));
-            result = player.getWorld().rayTrace(loc, player.getLocation().getDirection(), 50.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity) entity).getHealth() != 0.0D && entity != player));
+            result = player.getWorld().rayTrace(loc, player.getLocation().getDirection(), 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity) entity).getHealth() != 0.0D && entity != player));
             if (result != null) {
                 if(result.getHitEntity() != null){
                     break;

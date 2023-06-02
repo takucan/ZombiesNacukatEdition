@@ -1,9 +1,6 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
-import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -11,10 +8,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.CheckInBlock;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.isCritical;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
 
 import java.util.*;
 
@@ -52,6 +46,9 @@ public class ZombieZapper {
                 String hitmessage = "§6+15 Gold";
                 boolean intersect = false;
                 String critmessage = "§6+20 Gold (Critical Hit)";
+                Particle.DustOptions dustOptions = null;
+                Particle particle = Particle.CRIT_MAGIC;
+                new spawnParticle().spawn(particle,dustOptions,player);
 
                 LivingEntity livingEntity = new rayTrace().shoot(player,damage,hitmessage,critmessage,0.5);
                 if(livingEntity != null){
