@@ -2,9 +2,7 @@ package org.nacukat.zombiesnacukatedition;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import org.bukkit.Material;
-import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -14,9 +12,10 @@ import org.nacukat.zombiesnacukatedition.Guns.invokeGun;
 import org.nacukat.zombiesnacukatedition.Guns.playerAnimation;
 import org.nacukat.zombiesnacukatedition.Listeners.PlayerEvent;
 import org.nacukat.zombiesnacukatedition.Listeners.RemoveDropItem;
-import org.nacukat.zombiesnacukatedition.Shops.getCommend;
+import org.nacukat.zombiesnacukatedition.Shops.getShopCommend;
 import org.nacukat.zombiesnacukatedition.Shops.shopListener;
 import org.nacukat.zombiesnacukatedition.comands.revive;
+import org.nacukat.zombiesnacukatedition.comands.setMap;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,6 +23,8 @@ import java.util.HashMap;
 
 public final class ZombiesNacukatEdition extends JavaPlugin {
     public static Plugin plugin;
+
+    public static String currentMap;
 
     public static HashMap<String, Boolean> HasQF = new HashMap<>();
 
@@ -79,7 +80,8 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new PlayerEvent(),this);
         getServer().getPluginManager().registerEvents(new RemoveDropItem(),this);
         getCommand("rew").setExecutor(new revive());
-        getCommand("open-shop").setExecutor(new getCommend());
+        getCommand("open-shop").setExecutor(new getShopCommend());
+        getCommand("setmap").setExecutor(new setMap());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");
     }

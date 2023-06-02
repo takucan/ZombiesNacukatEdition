@@ -1,6 +1,5 @@
 package org.nacukat.zombiesnacukatedition.Shops;
 
-import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -16,7 +15,7 @@ import org.bukkit.inventory.ItemStack;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
-public class getCommend implements CommandExecutor {
+public class getShopCommend implements CommandExecutor {
   public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
     Player player = (Player)sender;
     player.sendMessage( node.get("Maps").get("DE").get("Doors").get(0).toString());
