@@ -6,3 +6,4 @@ commands:
   rew:
   open-shop:
   setmap:
+  reload-config:

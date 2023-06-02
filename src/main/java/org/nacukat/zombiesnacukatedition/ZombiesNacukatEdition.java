@@ -14,8 +14,10 @@ import org.nacukat.zombiesnacukatedition.Listeners.PlayerEvent;
 import org.nacukat.zombiesnacukatedition.Listeners.RemoveDropItem;
 import org.nacukat.zombiesnacukatedition.Shops.getShopCommend;
 import org.nacukat.zombiesnacukatedition.Shops.shopListener;
+import org.nacukat.zombiesnacukatedition.comands.reloadConfig;
 import org.nacukat.zombiesnacukatedition.comands.revive;
 import org.nacukat.zombiesnacukatedition.comands.setMap;
+import org.nacukat.zombiesnacukatedition.Doors.openingDoor;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +65,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
     public static HashMap<ItemStack, Long> totalbullets = new HashMap<>();
     public static HashMap<String, Long> Kills = new HashMap<>();
 
-    public static JsonNode node= null;
+    public static JsonNode node = null;
     @Override
     public void onEnable() {
         ObjectMapper mapper = new ObjectMapper();
@@ -79,8 +81,10 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new shopListener(),this);
         getServer().getPluginManager().registerEvents(new PlayerEvent(),this);
         getServer().getPluginManager().registerEvents(new RemoveDropItem(),this);
+        getServer().getPluginManager().registerEvents(new openingDoor(),this);
         getCommand("rew").setExecutor(new revive());
         getCommand("open-shop").setExecutor(new getShopCommend());
+        getCommand("reload-config").setExecutor(new reloadConfig());
         getCommand("setmap").setExecutor(new setMap());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");

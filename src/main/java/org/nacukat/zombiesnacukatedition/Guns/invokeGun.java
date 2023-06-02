@@ -1,5 +1,6 @@
 package org.nacukat.zombiesnacukatedition.Guns;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import org.bukkit.*;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -17,7 +18,9 @@ import org.nacukat.zombiesnacukatedition.Guns.gunFunc.ZombieZapper;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.dbs;
 import org.nacukat.zombiesnacukatedition.Skill.RightLightningRod;
 
+import java.util.List;
 import java.util.Random;
+import java.util.stream.StreamSupport;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -93,107 +96,110 @@ public class invokeGun implements Listener {
         isReloading.putIfAbsent(item.getItemMeta().getCustomModelData(),false);
         Ultimates.putIfAbsent(item.getItemMeta().getCustomModelData(),0);
         if(isReloading.get(item.getItemMeta().getCustomModelData()))return;
-        if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
-            Location loc = new Location(Bukkit.getWorld("world"), 21.0D, 72.0D, 31.0D);
-            if (e.getClickedBlock().getLocation().equals(loc)) {
-                ItemMeta itemMeta = item.getItemMeta();
-                if (item.getType().equals(Material.DIAMOND_PICKAXE)) {
-                    Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                    if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
-                        itemMeta.setDisplayName("§6§lZombie Zapper Ultimate");
-                        item.setItemMeta(itemMeta);
-                        Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                        item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-                        item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
-                        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                    }
-                }
-                if (item.getType().equals(Material.FLINT_AND_STEEL)) {
-                    Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                    switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
-                        case 0:
-                            itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate");
+        if (action.equals(Action.RIGHT_CLICK_BLOCK)&&currentMap != null) {
+            for(JsonNode ultimates: node.get("Maps").get(currentMap).get("Ultimates")){
+                Location loc = new Location(Bukkit.getWorld("world"), ultimates.get(0).asDouble(), ultimates.get(1).asDouble(), ultimates.get(2).asDouble());
+                if (e.getClickedBlock().getLocation().equals(loc)) {
+                    ItemMeta itemMeta = item.getItemMeta();
+                    if (item.getType().equals(Material.DIAMOND_PICKAXE)) {
+                        Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
+                        if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
+                            itemMeta.setDisplayName("§6§lZombie Zapper Ultimate");
                             item.setItemMeta(itemMeta);
+                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
                             item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
                             item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                            break;
-                        case 1:
-                            itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate II");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
-                            break;
-                        case 2:
-                            itemMeta.setDisplayName("§6§lDouble Barrel Shotgun III");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
-                            break;
+                        }
                     }
-                }
-                if (item.getType().equals(Material.GOLDEN_SHOVEL)) {
-                    Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                    switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
-                        case 0:
-                            itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate");
-                            item.setItemMeta(itemMeta);
-                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-                            item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                            break;
-                        case 1:
-                            itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate II");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
-                            break;
-                        case 2:
-                            itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate III");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
-                            break;
+                    if (item.getType().equals(Material.FLINT_AND_STEEL)) {
+                        Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
+                        switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
+                            case 0:
+                                itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate");
+                                item.setItemMeta(itemMeta);
+                                item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                                item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
+                                break;
+                            case 1:
+                                itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate II");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
+                                break;
+                            case 2:
+                                itemMeta.setDisplayName("§6§lDouble Barrel Shotgun III");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
+                                break;
+                        }
                     }
-                }
-                if (item.getType().equals(Material.GOLDEN_PICKAXE)) {
-                    Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                    switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
-                        case 0:
-                            itemMeta.setDisplayName("§6§lGold Digger Ultimate");
-                            item.setItemMeta(itemMeta);
-                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
-                            item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                            break;
-                        case 1:
-                            itemMeta.setDisplayName("§6§lGold Digger Ultimate II");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
-                            break;
-                        case 2:
-                            itemMeta.setDisplayName("§6§lGold Digger Ultimate III");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
-                            break;
-                        case 3:
-                            itemMeta.setDisplayName("§6§lGold Digger Ultimate IV");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(4));
-                            break;
-                        case 4:
-                            itemMeta.setDisplayName("§6§lGold Digger Ultimate V");
-                            item.setItemMeta(itemMeta);
-                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
-                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(5));
-                            break;
+                    if (item.getType().equals(Material.GOLDEN_SHOVEL)) {
+                        Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
+                        switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
+                            case 0:
+                                itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate");
+                                item.setItemMeta(itemMeta);
+                                item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                                item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
+                                break;
+                            case 1:
+                                itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate II");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
+                                break;
+                            case 2:
+                                itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate III");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
+                                break;
+                        }
                     }
+                    if (item.getType().equals(Material.GOLDEN_PICKAXE)) {
+                        Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
+                        switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
+                            case 0:
+                                itemMeta.setDisplayName("§6§lGold Digger Ultimate");
+                                item.setItemMeta(itemMeta);
+                                item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                                item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
+                                break;
+                            case 1:
+                                itemMeta.setDisplayName("§6§lGold Digger Ultimate II");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
+                                break;
+                            case 2:
+                                itemMeta.setDisplayName("§6§lGold Digger Ultimate III");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
+                                break;
+                            case 3:
+                                itemMeta.setDisplayName("§6§lGold Digger Ultimate IV");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(4));
+                                break;
+                            case 4:
+                                itemMeta.setDisplayName("§6§lGold Digger Ultimate V");
+                                item.setItemMeta(itemMeta);
+                                player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                                Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(5));
+                                break;
+                        }
+                    }
+                    break;
                 }
             }
         }

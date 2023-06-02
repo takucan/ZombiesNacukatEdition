@@ -13,7 +13,7 @@ public class setMap implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender commandSender, @NotNull Command command, @NotNull String s, @NotNull String[] strings) {
         if(strings.length==0)return false;
         if (node.get("Maps").get(strings[0])!= null){
-            currentMap = node.get("Maps").get(strings[0]).toString();
+            currentMap = strings[0];
         }
         return false;
     }
