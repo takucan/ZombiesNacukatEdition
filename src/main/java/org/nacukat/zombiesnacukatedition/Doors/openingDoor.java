@@ -3,11 +3,14 @@ package org.nacukat.zombiesnacukatedition.Doors;
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemStack;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -17,12 +20,41 @@ public class openingDoor implements Listener {
         Action action = e.getAction();
         Player player = e.getPlayer();
 
-        if(action.equals(Action.RIGHT_CLICK_BLOCK)&&e.getClickedBlock().getType().equals(Material.STONE_BUTTON)&&currentMap != null){
+        if(action.equals(Action.RIGHT_CLICK_BLOCK)&&currentMap != null){
             for (JsonNode door : node.get("Maps").get(currentMap).get("Doors")){
-                JsonNode position = door.get("position");
-                if(e.getClickedBlock().getLocation().equals(new Location(player.getWorld(),door.get("button").get(0).asDouble(),door.get("button").get(1).asDouble(),door.get("button").get(2).asDouble()))){
-                    String command = "fill "+(int)position.get(0).asDouble()+" "+(int)position.get(1).asDouble()+" "+(int)position.get(2).asDouble()+" "+(int)position.get(0).asDouble()+" "+(int)(position.get(1).asDouble()+3)+" "+(int)(position.get(2).asDouble()-2)+" air";
-                    plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),command);
+                for (JsonNode material : door.get("materials")){
+                    if(e.getClickedBlock().getType().equals(Material.valueOf(material.asText()))){
+                        JsonNode position = door.get("position");
+
+                        int x = e.getClickedBlock().getLocation().getBlockX();
+                        int y = e.getClickedBlock().getLocation().getBlockY();
+                        int z = e.getClickedBlock().getLocation().getBlockZ();
+                        World world = player.getWorld();
+                        Location point1 = new Location(world,position.get(0).asInt(),position.get(1).asInt(),position.get(2).asInt()); // 指定範囲の1つ目の座標
+                        Location point2; // 指定範囲の2つ目の座標
+                        if(door.get("facing").asInt()==1){
+                            point2 = new Location(world,position.get(0).asInt()-2,position.get(1).asInt()+3,position.get(2).asInt());
+                        }else {
+                            point2 = new Location(world,position.get(0).asInt(),position.get(1).asInt()+3,position.get(2).asInt()-2);
+                        }
+
+                        int minX = Math.min(point1.getBlockX(), point2.getBlockX());
+                        int minY = Math.min(point1.getBlockY(), point2.getBlockY());
+                        int minZ = Math.min(point1.getBlockZ(), point2.getBlockZ());
+                        int maxX = Math.max(point1.getBlockX(), point2.getBlockX());
+                        int maxY = Math.max(point1.getBlockY(), point2.getBlockY());
+                        int maxZ = Math.max(point1.getBlockZ(), point2.getBlockZ());
+                        if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ) {
+                            for (int x1 = minX; x1 <= maxX; x1++) {
+                                for (int y1 = minY; y1 <= maxY; y1++) {
+                                    for (int z1 = minZ; z1 <= maxZ; z1++) {
+                                        Block block = world.getBlockAt(x1, y1, z1);
+                                        block.setType(Material.AIR);
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
