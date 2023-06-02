@@ -1,0 +1,7 @@
+name: ZombiesNacukatEdition
+version: '${project.version}'
+main: org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition
+api-version: 1.19
+commands:
+  rew:
+  open-shop:
