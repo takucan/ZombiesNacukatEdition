@@ -2,19 +2,20 @@ package org.nacukat.zombiesnacukatedition.comands;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
 import org.nacukat.zombiesnacukatedition.Doors.setDoors;
 
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.currentMap;
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.node;
+import java.util.*;
+
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class setMap implements CommandExecutor {
     @Override
@@ -28,6 +29,7 @@ public class setMap implements CommandExecutor {
                 Location target = new Location(Bukkit.getWorld("world"),door.get("position").get(0).asInt(),door.get("position").get(1).asInt(),door.get("position").get(2).asInt());
 
                 new setDoors().setDoor(start,end,target);
+
 //                Location startPoint = new Location(Bukkit.getWorld("world"),door.get("starrtPoint").get(0).asInt(),door.get("startPoint").get(1).asInt(),door.get("startPoint").get(2).asInt());
 //                Location endPoint; // 複製元の終点の座標を指定
 //                if(door.get("facing").asInt() == 1){
@@ -60,6 +62,9 @@ public class setMap implements CommandExecutor {
 //                    }
 //                }
             }
+
+
+
         }
         return false;
     }

@@ -33,6 +33,7 @@ public class invokeGun implements Listener {
         Player player = e.getPlayer();
         ItemStack item = e.getItem();
         isDown.putIfAbsent(player,false);
+        Gold.putIfAbsent(player.getUniqueId(),0);
         if(isDown.get(player))e.setCancelled(true);
 
         if (item == null)return;

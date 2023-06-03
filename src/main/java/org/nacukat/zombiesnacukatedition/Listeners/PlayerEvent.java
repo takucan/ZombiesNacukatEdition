@@ -60,6 +60,7 @@ public class PlayerEvent implements Listener {
         player.setGameMode(GameMode.CREATIVE);
         player.teleport(new Location(player.getWorld(),player.getLocation().getX(),player.getLocation().getY()-1,player.getLocation().getZ()));
         sittingArrow.setSilent(true);
+        sittingArrow.setInvulnerable(true);
         sittingArrow.setCustomName("sittingArrow");
         sittingArrow.addPassenger((Entity)player);
         new BukkitRunnable(){

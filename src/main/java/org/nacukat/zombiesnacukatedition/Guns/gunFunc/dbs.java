@@ -1,9 +1,6 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
-import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -80,8 +77,26 @@ public class dbs {
 
 
           String critmessage = "§6+12 Gold (Critical Hit)";
+          new rayTrace().shoot(player,8,12,damage,hitmessage,critmessage,knockBack,direction);//shoot
+          }
+          for (int i1 = 0;i1 <30;i1++){
+            Vector direction = player.getEyeLocation().getDirection();
 
-          new rayTrace().shoot(player,damage,hitmessage,critmessage,knockBack);
+            double randomYawOffset = Math.toRadians(Math.random() * 45.0D - 22.0D);
+            double randomPitchOffset = Math.toRadians(Math.random() * 45.0D - 22.0D);
+            direction.rotateAroundY(randomYawOffset);
+            direction.rotateAroundX(randomPitchOffset);
+            Location loc = player.getEyeLocation();
+            Random random = new Random();
+
+            loc = loc.add(direction.multiply(1.5+random.nextDouble(2)));
+            Particle particle = Particle.LAVA;
+            for (Player player1 : Bukkit.getWorld("world").getPlayers()){
+              if(showParticle.get(player1)){
+                player1.spawnParticle(particle,loc,0);
+              }
+            }
+
         } 
         if (item.getAmount() > 1)
           item.setAmount(Math.toIntExact(((Long)magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).longValue()) - 1); 

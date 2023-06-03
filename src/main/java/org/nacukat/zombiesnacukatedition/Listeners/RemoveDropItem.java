@@ -24,16 +24,6 @@ public class RemoveDropItem implements Listener {
         if (e.getEntity().getKiller() instanceof Player) {
             Kills.putIfAbsent(e.getEntity().getKiller().getName(), Long.valueOf(0L));
             Kills.put(e.getEntity().getKiller().getName(), Long.valueOf(((Long) Kills.get(e.getEntity().getKiller().getName())).longValue() + 1L));
-            ScoreboardManager manager = Bukkit.getScoreboardManager();
-            Scoreboard scoreboard = manager.getMainScoreboard();
-            Objective objective = scoreboard.getObjective("ZombiesKills");
-            objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
-            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
-                Kills.putIfAbsent(player.getName(), Long.valueOf(0L));
-                Score score = objective.getScore((OfflinePlayer) player);
-                score.setScore(Math.toIntExact(((Long) Kills.get(player.getName())).longValue()));
-                player.setScoreboard(scoreboard);
-            }
         }
     }
 }

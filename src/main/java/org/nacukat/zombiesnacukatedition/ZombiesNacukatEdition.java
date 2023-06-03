@@ -3,12 +3,15 @@ package org.nacukat.zombiesnacukatedition;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.scoreboard.*;
 import org.nacukat.zombiesnacukatedition.Guns.invokeGun;
 import org.nacukat.zombiesnacukatedition.Guns.playerAnimation;
 import org.nacukat.zombiesnacukatedition.Listeners.PlayerEvent;
@@ -23,7 +26,10 @@ import org.nacukat.zombiesnacukatedition.comands.toggleParticle;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public final class ZombiesNacukatEdition extends JavaPlugin {
     public static Plugin plugin;
@@ -69,6 +75,8 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
 
     public static HashMap<Player,Boolean> showParticle = new HashMap<>();
     public static JsonNode node = null;
+
+    public static HashMap<UUID,Integer> Gold = new HashMap<>();
     @Override
     public void onEnable() {
         for (Player player : Bukkit.getWorld("world").getPlayers()){
@@ -96,6 +104,46 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getCommand("toggle-particles").setExecutor(new toggleParticle());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");
+
+        ScoreboardManager manager = Bukkit.getScoreboardManager();
+        Scoreboard scoreboard = manager.getMainScoreboard();
+        if(scoreboard.getObjective("Gold") != null){
+            scoreboard.getObjective("Gold").unregister();
+        }
+        if(scoreboard.getObjective("ZombiesKills") != null){
+            scoreboard.getObjective("ZombiesKills").unregister();
+        }
+        scoreboard.registerNewObjective("ZombiesKills", Criteria.DUMMY,"ZombiesKills");
+        scoreboard.registerNewObjective("Gold", Criteria.DUMMY,"Golds");
+        Objective objective =scoreboard.getObjective("Gold");
+        objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+        Objective kills = scoreboard.getObjective("ZombiesKills");
+        kills.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+        new BukkitRunnable(){
+            List<String> score = new ArrayList<>();
+            @Override
+            public void run() {
+                int i = 0;
+                for (String entry : scoreboard.getEntries()){
+                    scoreboard.resetScores(entry);
+                }
+                int downs = 0;
+                for (Player player : Bukkit.getWorld("world").getPlayers()){
+
+                    isDown.putIfAbsent(player,false);
+                    Gold.putIfAbsent(player.getUniqueId(),0);
+                    Kills.putIfAbsent(player.getName(), Long.valueOf(0L));
+
+                    kills.getScore(player).setScore(Math.toIntExact(Kills.get(player.getName())));
+                    objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId())).setScore(i);
+                    score.add(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId()));
+
+                    i++;
+
+                }
+
+            }
+        }.runTaskTimer(plugin,0,20);
     }
 
     @Override
