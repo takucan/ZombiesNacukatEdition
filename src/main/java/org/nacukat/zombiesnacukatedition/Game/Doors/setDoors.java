@@ -1,4 +1,4 @@
-package org.nacukat.zombiesnacukatedition.Doors;
+package org.nacukat.zombiesnacukatedition.Game.Doors;
 
 import org.bukkit.Location;
 import org.bukkit.World;

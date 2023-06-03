@@ -21,7 +21,7 @@ import org.nacukat.zombiesnacukatedition.Shops.shopListener;
 import org.nacukat.zombiesnacukatedition.comands.reloadConfig;
 import org.nacukat.zombiesnacukatedition.comands.revive;
 import org.nacukat.zombiesnacukatedition.comands.setMap;
-import org.nacukat.zombiesnacukatedition.Doors.openingDoor;
+import org.nacukat.zombiesnacukatedition.Game.Doors.openingDoor;
 import org.nacukat.zombiesnacukatedition.comands.toggleParticle;
 
 import java.io.File;

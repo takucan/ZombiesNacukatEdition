@@ -2,18 +2,14 @@ package org.nacukat.zombiesnacukatedition.comands;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.*;
 import org.jetbrains.annotations.NotNull;
-import org.nacukat.zombiesnacukatedition.Doors.setDoors;
-
-import java.util.*;
+import org.nacukat.zombiesnacukatedition.Game.Doors.setDoors;
+import org.nacukat.zombiesnacukatedition.Game.StartGame;
+import org.nacukat.zombiesnacukatedition.Game.Windows.setSpawnPoints;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -29,7 +25,6 @@ public class setMap implements CommandExecutor {
                 Location target = new Location(Bukkit.getWorld("world"),door.get("position").get(0).asInt(),door.get("position").get(1).asInt(),door.get("position").get(2).asInt());
 
                 new setDoors().setDoor(start,end,target);
-
 //                Location startPoint = new Location(Bukkit.getWorld("world"),door.get("starrtPoint").get(0).asInt(),door.get("startPoint").get(1).asInt(),door.get("startPoint").get(2).asInt());
 //                Location endPoint; // 複製元の終点の座標を指定
 //                if(door.get("facing").asInt() == 1){
@@ -62,8 +57,11 @@ public class setMap implements CommandExecutor {
 //                    }
 //                }
             }
-
-
+            for (JsonNode window : node.get("Maps").get(currentMap).get("Windows")){
+                Location location = new Location(Bukkit.getWorld("world"),window.get("spawnPoint").get(0).asInt(),window.get("spawnPoint").get(1).asInt(),window.get("spawnPoint").get(2).asInt());
+                new setSpawnPoints().setStand(location);
+            }
+            new StartGame().start();
 
         }
         return false;

@@ -49,8 +49,8 @@ public class spawnParticle {
                 for (Player player1 : Bukkit.getWorld("world").getPlayers()){
                     if(showParticle.get(player1)){
                         Random random = new Random();
-                        int randomInt = random.nextInt(8);
-                        Color[] colors = {Color.AQUA,Color.BLUE,Color.RED,Color.PURPLE,Color.GREEN,Color.YELLOW,Color.LIME,Color.FUCHSIA,Color.fromBGR(255,0,255)};
+                        int randomInt = random.nextInt(6);
+                        Color[] colors = {Color.PURPLE,Color.BLUE,Color.AQUA,Color.LIME,Color.YELLOW,Color.ORANGE,Color.RED};
                         Particle.DustOptions dustOptions = new Particle.DustOptions(colors[randomInt],1);
                         Particle particle = Particle.REDSTONE;
                         player1.spawnParticle(particle,loc,0,dustOptions);
