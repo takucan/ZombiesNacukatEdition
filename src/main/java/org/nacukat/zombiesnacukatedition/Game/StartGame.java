@@ -39,8 +39,9 @@ public class StartGame {
                     }else {
                         for (Player player : Bukkit.getWorld("world").getPlayers()){
                             player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0F, 0.8F);
-                            player.sendTitle("§bYou Win!", "");
+                            player.sendTitle("§aYou Win!", "",10,100,20);
                             player.sendMessage((count/20)+"s");
+                            currentMap = null;
                             cancel();
                         }
                     }

@@ -1,9 +1,7 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc.other;
 
-import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
-import org.bukkit.Sound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -19,7 +17,8 @@ import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.Gold;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.bosses;
 
 public class rayTrace {
-    public LivingEntity shoot(Player player,int gold,int critgold,double damage,String hitmessage,String critmessage,double knockBack,Vector direction){
+    public LivingEntity shoot(Player player, int gold, int critgold, double damage, String hitmessage, String critmessage, double knockBack, Vector direction){
+        Block block = null;
 
         boolean intersect = false;
         RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), direction, 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
