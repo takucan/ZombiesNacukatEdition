@@ -23,9 +23,13 @@ public class rayTrace {
         boolean intersect = false;
         RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), direction, 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
         if(rayTraceResult == null)return null;
-        if(rayTraceResult.getHitBlock() != null){
-            rayTraceResult = new CheckInBlock().checkOppositeLocation(player,rayTraceResult,rayTraceResult.getHitPosition().toLocation(player.getWorld()));
+        RayTraceResult newRayTrace = new get01Location().getLocation(player.getEyeLocation(),player.getEyeLocation().getDirection(),0.1,700);
+        if(newRayTrace != null){
+            rayTraceResult = newRayTrace;
         }
+//        if(rayTraceResult.getHitBlock() != null){
+//            rayTraceResult = new CheckInBlock().checkOppositeLocation(player,rayTraceResult,rayTraceResult.getHitPosition().toLocation(player.getWorld()));
+//        }
 
 
         Entity hitEntity = rayTraceResult.getHitEntity();

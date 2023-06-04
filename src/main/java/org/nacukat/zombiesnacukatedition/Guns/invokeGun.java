@@ -16,6 +16,7 @@ import org.nacukat.zombiesnacukatedition.Guns.gunFunc.GoldDigger;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.RainbowRifle;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.ZombieZapper;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.dbs;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.get01Location;
 import org.nacukat.zombiesnacukatedition.Skill.RightLightningRod;
 
 import java.util.List;
@@ -65,6 +66,9 @@ public class invokeGun implements Listener {
                     }
                 }).runTaskTimer(plugin, 6L, 1L);
             }
+        }
+        if(item.getType().equals(Material.NETHER_WART)){
+            new get01Location().getLocation(player.getEyeLocation(),player.getEyeLocation().getDirection(),0.1,100);
         }
 
         if(!action.isRightClick()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
