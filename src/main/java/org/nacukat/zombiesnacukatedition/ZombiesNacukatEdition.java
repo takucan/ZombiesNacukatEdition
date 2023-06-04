@@ -48,7 +48,14 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
 
     public static String[] bosses = new String[] { "The old one", "Giant" };
 
-    public static Material[] canWallShot = new Material[]{Material.STONE_BRICK_SLAB,Material.STONE_BRICK_STAIRS,Material.OAK_SLAB,Material.BARRIER,Material.GLASS_PANE};
+    public static Material[] canWallShot = new Material[]{
+            Material.STONE_BRICK_SLAB,
+            Material.STONE_BRICK_STAIRS,
+            Material.OAK_SLAB,
+            Material.BARRIER,
+            Material.GLASS_PANE,
+            Material.SPRUCE_SLAB,
+            Material.SPRUCE_STAIRS};
     public static HashMap<EntityType, Double[]> HeadSizes = new HashMap<>();
 
     static {

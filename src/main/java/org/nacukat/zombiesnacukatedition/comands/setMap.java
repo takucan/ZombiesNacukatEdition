@@ -18,6 +18,7 @@ import org.jetbrains.annotations.NotNull;
 import org.nacukat.zombiesnacukatedition.Game.Doors.setDoors;
 import org.nacukat.zombiesnacukatedition.Game.StartGame;
 import org.nacukat.zombiesnacukatedition.Game.Windows.setSpawnPoints;
+import org.nacukat.zombiesnacukatedition.Game.Windows.setWindows;
 import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
@@ -28,6 +29,7 @@ public class setMap implements CommandExecutor {
         if(strings.length==0)return false;
         if (node.get("Maps").get(strings[0])!= null){
             currentMap = strings[0];
+            new setWindows().set();
             new BukkitRunnable() {
                 @Override
                 public void run() {

@@ -30,8 +30,8 @@ public class Zombies {
 
         Zombie zombie = (Zombie) Bukkit.getWorld("world").spawnEntity(nearbyPoints.get(random.nextInt(nearbyPoints.size())).getLocation(),EntityType.valueOf(info.get("type").asText()),false);
 
-        zombie.setHealth(info.get("Health").asDouble());
         zombie.setMaxHealth(info.get("Health").asDouble());
+        zombie.setHealth(info.get("Health").asDouble());
         zombie.getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).setBaseValue(info.get("Attack").asDouble());
         zombie.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).setBaseValue(info.get("Speed").asDouble());
 

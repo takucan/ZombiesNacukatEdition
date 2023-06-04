@@ -47,12 +47,12 @@ public class openingDoor implements Listener {
                                     for (int y1 = minY; y1 <= maxY; y1++) {
                                         for (int z1 = minZ; z1 <= maxZ; z1++) {
                                             Block block = world.getBlockAt(x1, y1, z1);
-                                            Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-door.get("price").asInt());
                                             block.setType(Material.AIR);
                                         }
                                     }
                                 }
                             }
+                            Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-door.get("price").asInt());
                         }
                     }
 
