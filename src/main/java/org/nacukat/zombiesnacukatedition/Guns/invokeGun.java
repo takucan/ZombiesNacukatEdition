@@ -67,9 +67,6 @@ public class invokeGun implements Listener {
                 }).runTaskTimer(plugin, 6L, 1L);
             }
         }
-        if(item.getType().equals(Material.NETHER_WART)){
-            new get01Location().getLocation(player.getEyeLocation(),player.getEyeLocation().getDirection(),0.1,100);
-        }
 
         if(!action.isRightClick()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
 
@@ -104,12 +101,13 @@ public class invokeGun implements Listener {
         if (action.equals(Action.RIGHT_CLICK_BLOCK)&&currentMap != null) {
             for(JsonNode ultimates: node.get("Maps").get(currentMap).get("Ultimates")){
                 Location loc = new Location(Bukkit.getWorld("world"), ultimates.get(0).asDouble(), ultimates.get(1).asDouble(), ultimates.get(2).asDouble());
-                if (e.getClickedBlock().getLocation().equals(loc)) {
+                if (e.getClickedBlock().getLocation().equals(loc)&&Gold.get(player.getUniqueId())>=1500) {
                     ItemMeta itemMeta = item.getItemMeta();
                     if (item.getType().equals(Material.DIAMOND_PICKAXE)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
                         if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
                             itemMeta.setDisplayName("§6§lZombie Zapper Ultimate");
+                            Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                             item.setItemMeta(itemMeta);
                             Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
                             item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
@@ -122,6 +120,7 @@ public class invokeGun implements Listener {
                         switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
                             case 0:
                                 itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
                                 item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
@@ -130,12 +129,14 @@ public class invokeGun implements Listener {
                                 break;
                             case 1:
                                 itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate II");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
                                 break;
                             case 2:
                                 itemMeta.setDisplayName("§6§lDouble Barrel Shotgun III");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
@@ -147,6 +148,7 @@ public class invokeGun implements Listener {
                         switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
                             case 0:
                                 itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
                                 item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
@@ -155,12 +157,14 @@ public class invokeGun implements Listener {
                                 break;
                             case 1:
                                 itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate II");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
                                 break;
                             case 2:
                                 itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate III");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
@@ -172,6 +176,7 @@ public class invokeGun implements Listener {
                         switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
                             case 0:
                                 itemMeta.setDisplayName("§6§lGold Digger Ultimate");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
                                 item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
@@ -180,24 +185,28 @@ public class invokeGun implements Listener {
                                 break;
                             case 1:
                                 itemMeta.setDisplayName("§6§lGold Digger Ultimate II");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(2));
                                 break;
                             case 2:
                                 itemMeta.setDisplayName("§6§lGold Digger Ultimate III");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(3));
                                 break;
                             case 3:
                                 itemMeta.setDisplayName("§6§lGold Digger Ultimate IV");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(4));
                                 break;
                             case 4:
                                 itemMeta.setDisplayName("§6§lGold Digger Ultimate V");
+                                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(5));

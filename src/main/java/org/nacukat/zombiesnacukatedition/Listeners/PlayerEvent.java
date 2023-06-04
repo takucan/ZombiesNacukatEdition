@@ -1,9 +1,8 @@
 package org.nacukat.zombiesnacukatedition.Listeners;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
+import com.fasterxml.jackson.databind.JsonNode;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -17,10 +16,7 @@ import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
+import java.util.*;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -90,10 +86,102 @@ public class PlayerEvent implements Listener {
         }
 
     }
+    boolean repairing = false;
 
     @EventHandler
     public void onPlayerSneakDown(PlayerToggleSneakEvent e) {
         final Player player = e.getPlayer();
+        if(!repairing){
+            int windowNum = 0;
+            for (JsonNode window:node.get("Maps").get(currentMap).get("Windows")){
+                JsonNode winloc = window.get("window").get(3);
+                Location location=new Location(player.getWorld(),winloc.get(0).asDouble(),winloc.get(1).asDouble(),winloc.get(2).asDouble());
+                if(player.getLocation().distance(location) <= 1.5){
+                    player.playSound(player.getLocation(),Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR,1,1);
+                    player.sendMessage("§aRepairing Windows. Keep holding SNEAK to continue repairing.");
+                    repairing = true;
+
+                    new BukkitRunnable(){
+                        int last = 0;
+                        int count = 0;
+                        @Override
+                        public void run() {
+                            Location point3 = new Location(Bukkit.getWorld("world"),window.get("window").get(2).get(0).asDouble(),window.get("window").get(2).get(1).asDouble(),window.get("window").get(2).get(2).asDouble());
+                            // 範囲内にいるかチェックする
+                            if(!point3.getNearbyLivingEntities(1,livingEntity -> livingEntity.getType() != EntityType.PLAYER).isEmpty()&&repairing){
+                                player.sendMessage("§cStopped repairing. There are enemies nearby!");
+                                cancel();
+                                repairing = false;
+                            }
+                            if(!player.isSneaking()){
+                                player.sendMessage("§cStopped repairing. Hold SNEAK to continue repairing!");
+                                repairing = false;
+                                cancel();
+                            }
+                            if(player.getLocation().distance(location) > 1.5&&repairing){
+                                player.sendMessage("§cStopped repairing. Stay within range of the window to repair it!");
+                                repairing = false;
+                                cancel();
+                            }
+                            if(count - last >= 10){
+                                Location point1 = new Location(Bukkit.getWorld("world"),window.get("window").get(0).get(0).asInt(),window.get("window").get(0).get(1).asInt(),window.get("window").get(0).get(2).asInt());
+                                Location point2 = new Location(Bukkit.getWorld("world"),window.get("window").get(1).get(0).asInt(),window.get("window").get(1).get(1).asInt(),window.get("window").get(1).get(2).asInt());
+                                World world = Bukkit.getWorld("world"); // ワールド名を適宜変更してください
+                                Random random = new Random();
+
+                                double minX = Math.min(point1.getX(), point2.getX());
+                                double minY = Math.min(point1.getY(), point2.getY());
+                                double minZ = Math.min(point1.getZ(), point2.getZ());
+                                double maxX = Math.max(point1.getX(), point2.getX());
+                                double maxY = Math.max(point1.getY(), point2.getY());
+                                double maxZ = Math.max(point1.getZ(), point2.getZ());
+
+                                // 範囲内に存在する非空気ブロックのリストを作成する
+                                List<Block> blocks = new ArrayList<>();
+                                for (int x = (int) minX; x <= maxX; x++) {
+                                    for (int y = (int) minY; y <= maxY; y++) {
+                                        for (int z = (int) minZ; z <= maxZ; z++) {
+                                            Block block = world.getBlockAt(x, y, z);
+                                            if (block.getType() == Material.AIR) {
+
+                                                blocks.add(block);
+                                                player.playSound(block.getLocation(),Sound.ENTITY_ZOMBIE_ATTACK_WOODEN_DOOR,1,1);
+
+                                            }
+                                        }
+                                    }
+                                }
+
+
+                                if (!blocks.isEmpty()) {
+                                    Block block = blocks.get(random.nextInt(blocks.size()));
+                                    Location blockLocation = new Location(world,block.getX()+0.5,block.getY()+0.5,block.getZ()+0.5);
+                                    Material material = Material.OAK_SLAB;
+                                    material.createBlockData("[type=bottom]");
+                                    player.sendMessage("§6+10 Gold");
+                                    Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())+10);
+                                    block.setType(material);
+
+                                }
+                                if(blocks.size() == 1){
+                                    player.sendMessage("§aYou have fully repaired this window!");
+                                    player.playSound(player.getEyeLocation(),Sound.BLOCK_ANVIL_PLACE,1,2);
+                                    repairing = false;
+                                }
+
+                                last = count;
+                            }
+                            count++;
+                        }
+                    }.runTaskTimer(plugin,0,2);
+                }
+                windowNum++;
+            }
+        }
+
+
+
+
         double count = 15.0;
         HasFR.putIfAbsent(player.getName(), Boolean.valueOf(false));
         if (HasFR.get(player.getName())) count = 3.0D;

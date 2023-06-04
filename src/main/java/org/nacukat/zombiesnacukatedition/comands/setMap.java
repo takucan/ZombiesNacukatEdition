@@ -1,15 +1,24 @@
 package org.nacukat.zombiesnacukatedition.comands;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import net.minecraft.world.level.block.DoubleBlockFinder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Particle;
+import org.bukkit.block.Block;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.material.MaterialData;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 import org.nacukat.zombiesnacukatedition.Game.Doors.setDoors;
 import org.nacukat.zombiesnacukatedition.Game.StartGame;
 import org.nacukat.zombiesnacukatedition.Game.Windows.setSpawnPoints;
+import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -19,6 +28,13 @@ public class setMap implements CommandExecutor {
         if(strings.length==0)return false;
         if (node.get("Maps").get(strings[0])!= null){
             currentMap = strings[0];
+            new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (currentMap == null)cancel();
+                    new windowBreak().checkZombieInRange();
+                }
+            }.runTaskTimer(plugin, 0L, 30L); // 1秒 = 20 tick
             for (JsonNode door : node.get("Maps").get(currentMap).get("Doors")){
                 Location start = new Location(Bukkit.getWorld("world"),door.get("startPoint").get(0).asInt(),door.get("startPoint").get(1).asInt(),door.get("startPoint").get(2).asInt());
                 Location end = new Location(Bukkit.getWorld("world"),door.get("endPoint").get(0).asInt(),door.get("endPoint").get(1).asInt(),door.get("endPoint").get(2).asInt());

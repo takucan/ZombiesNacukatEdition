@@ -14,6 +14,10 @@ public class StartWave {
             int currentWave = 0;
             @Override
             public void run() {
+                if(currentMap == null){
+                    cancel();
+                    return;
+                }
                 if(currentWave < node.get("Maps").get(currentMap).get("Rounds").get(round).get("wavesInRound").asInt()){
                     notSpawnedAll = true;
                     JsonNode wave = node.get("Maps").get(currentMap).get("Rounds").get(round).get("waves").get(currentWave);

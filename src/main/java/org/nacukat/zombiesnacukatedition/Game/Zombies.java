@@ -15,8 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Random;
 
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.node;
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.plugin;
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class Zombies {
     public void spawnZombie(int num){
@@ -57,5 +56,21 @@ public class Zombies {
             zombie.setMetadata("isBoss", new FixedMetadataValue(plugin,true));
         }
         zombie.setShouldBurnInDay(false);
+
+
+        Player nearestPlayer = null;
+        double nearestDistance = Double.MAX_VALUE;
+
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            isDown.putIfAbsent(player,false);
+            if(!isDown.get(player)){
+                double distance = player.getLocation().distance(zombie.getLocation());
+                if (distance < nearestDistance) {
+                    nearestPlayer = player;
+                    nearestDistance = distance;
+                }
+            }
+        }
+        zombie.setTarget(nearestPlayer);
     }
 }
