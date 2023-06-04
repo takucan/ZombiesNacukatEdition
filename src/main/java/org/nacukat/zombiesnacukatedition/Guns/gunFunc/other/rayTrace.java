@@ -24,8 +24,7 @@ public class rayTrace {
         RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), direction, 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
         if(rayTraceResult == null)return null;
         if(rayTraceResult.getHitBlock() != null){
-            RayTraceResult raytrace = new CheckInBlock().checkOppositeLocation(player,rayTraceResult,rayTraceResult.getHitPosition().toLocation(player.getWorld()));
-            rayTraceResult = raytrace;
+            rayTraceResult = new CheckInBlock().checkOppositeLocation(player,rayTraceResult,rayTraceResult.getHitPosition().toLocation(player.getWorld()));
         }
 
 
