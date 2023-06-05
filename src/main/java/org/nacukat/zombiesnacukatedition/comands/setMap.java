@@ -76,8 +76,10 @@ public class setMap implements CommandExecutor {
 //                }
             }
             for (JsonNode window : node.get("Maps").get(currentMap).get("Windows")){
-                Location location = new Location(Bukkit.getWorld("world"),window.get("spawnPoint").get(0).asInt(),window.get("spawnPoint").get(1).asInt(),window.get("spawnPoint").get(2).asInt());
-                new setSpawnPoints().setStand(location);
+                Location location = new Location(Bukkit.getWorld("world"),window.get("spawnPoint").get(0).asDouble(),window.get("spawnPoint").get(1).asDouble(),window.get("spawnPoint").get(2).asDouble());
+                new setSpawnPoints().setStand(location,true);
+                Location armlocation = new Location(Bukkit.getWorld("world"),window.get("window").get(3).get(0).asDouble(),window.get("window").get(3).get(1).asDouble(),window.get("window").get(3).get(2).asDouble());
+                new setSpawnPoints().setStand(armlocation,false);
             }
             new StartGame().start();
 

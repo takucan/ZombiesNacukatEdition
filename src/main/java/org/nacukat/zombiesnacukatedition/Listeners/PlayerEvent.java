@@ -11,8 +11,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerArmorStandManipulateEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.nacukat.zombiesnacukatedition.Game.Windows.checkIsWindowBreak;
@@ -86,6 +89,23 @@ public class PlayerEvent implements Listener {
 
         }
 
+    }
+    @EventHandler
+    public void onArm(PlayerArmorStandManipulateEvent e){
+        e.setCancelled(true);
+    }
+    @EventHandler
+    public void onChangeSlot(PlayerItemHeldEvent e){
+        Player player = e.getPlayer();
+        if (player.getInventory().getItem(e.getNewSlot()) == null)return;
+        ItemStack item = player.getInventory().getItem(e.getNewSlot());
+        if(!item.hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
+
+        Ultimates.putIfAbsent(item.getItemMeta().getCustomModelData(),0);
+
+        totalBullets.putIfAbsent(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+        player.setExp(1);
+        player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
     }
     HashMap<Player,Integer> repairing = new HashMap<>();
 

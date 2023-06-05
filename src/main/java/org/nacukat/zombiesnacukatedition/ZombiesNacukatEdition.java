@@ -77,7 +77,14 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
 
     public static HashMap<Player, Long> lastBlock = new HashMap<>();
 
-    public static HashMap<ItemStack, Long> totalbullets = new HashMap<>();
+    public static HashMap<Material, Integer[]> totalbulletsMaterial = new HashMap<>();
+    static {
+        totalbulletsMaterial.put(Material.DIAMOND_PICKAXE,new Integer[]{100,120});
+        totalbulletsMaterial.put(Material.GOLDEN_PICKAXE,new Integer[]{70,100,130,160,200,250});
+        totalbulletsMaterial.put(Material.GOLDEN_SHOVEL,new Integer[]{240,288,312,336});
+        totalbulletsMaterial.put(Material.FLINT_AND_STEEL,new Integer[]{20,30,36,42});
+    }
+    public static HashMap<Integer,Integer> totalBullets = new HashMap<>();
     public static HashMap<String, Long> Kills = new HashMap<>();
 
     public static HashMap<Player,Boolean> showParticle = new HashMap<>();

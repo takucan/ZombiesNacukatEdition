@@ -74,6 +74,7 @@ public class invokeGun implements Listener {
         HasQF.putIfAbsent(player.getName(),false);
         HasFB.putIfAbsent(player.getName(),false);
 
+
         if (!meta.hasCustomModelData()) {
             Random random = new Random();
             int randomMeta = random.nextInt(100000);
@@ -94,9 +95,10 @@ public class invokeGun implements Listener {
             }
             item.setItemMeta(meta);
         }
-
         isReloading.putIfAbsent(item.getItemMeta().getCustomModelData(),false);
         Ultimates.putIfAbsent(item.getItemMeta().getCustomModelData(),0);
+        totalBullets.putIfAbsent(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+
         if(isReloading.get(item.getItemMeta().getCustomModelData()))return;
         if (action.equals(Action.RIGHT_CLICK_BLOCK)&&currentMap != null) {
             for(JsonNode ultimates: node.get("Maps").get(currentMap).get("Ultimates")){
@@ -213,10 +215,17 @@ public class invokeGun implements Listener {
                                 break;
                         }
                     }
+                    totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+
+                    player.setExp(1);
+                    player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
                     break;
                 }
             }
         }
+        if(totalBullets.get(item.getItemMeta().getCustomModelData())<=0)return;
+        player.setExp(1);
+        player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
 
         switch (item.getType()){
             case DIAMOND_PICKAXE:

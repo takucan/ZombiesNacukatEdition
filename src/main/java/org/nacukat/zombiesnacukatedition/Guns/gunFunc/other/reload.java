@@ -8,12 +8,12 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.HashMap;
 
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.isShootingRR;
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.plugin;
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class reload {
     public boolean reloadGun(final ItemStack item, final HashMap<Integer, Boolean> isReloading, final HashMap<Integer, Long> magazines, final long clipAmmo, long period, Player player) {
         magazines.putIfAbsent(item.getItemMeta().getCustomModelData(), 0L);
+        if(totalBullets.get(item.getItemMeta().getCustomModelData())==0)return false;
         if (magazines.get(item.getItemMeta().getCustomModelData()) != clipAmmo) {
             player.playSound(player, Sound.ENTITY_HORSE_GALLOP, 0.6F, 0.2F);
             Bukkit.getServer().getLogger().info("start");

@@ -67,6 +67,9 @@ public class dbs {
           player1.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 0.6F, 1.2F); 
         if (lastShotTime != null);
         String hitmessage = "§6+8 Gold";
+        totalBullets.put(item.getItemMeta().getCustomModelData(),totalBullets.get(item.getItemMeta().getCustomModelData())-1);
+        player.setExp(1);
+        player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
         for (int i = 0; i <= 10; i++) {
           Vector direction = player.getEyeLocation().getDirection();
           double randomYawOffset = Math.toRadians(Math.random() * 20.0D - 10.0D);
