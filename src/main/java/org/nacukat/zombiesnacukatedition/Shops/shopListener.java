@@ -12,6 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
@@ -93,7 +94,8 @@ public class shopListener implements Listener {
               }
               player.sendMessage("" + ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Extra Health Perk "+ehValue + ChatColor.YELLOW + "!");
               player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
-              player.addPotionEffect(PotionEffectType.HEALTH_BOOST.createEffect(-1,EHs.get(player.getName())-1),false);
+              PotionEffect potionEffect = new PotionEffect(PotionEffectType.HEALTH_BOOST,-1,EHs.get(player.getName())-1,false,false,false);
+              player.addPotionEffect(potionEffect);
               e.getInventory().getItem(e.getSlot()).addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
               e.getInventory().getItem(e.getSlot()).addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
 

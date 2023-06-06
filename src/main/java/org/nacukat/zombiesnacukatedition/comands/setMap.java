@@ -80,7 +80,6 @@ public class setMap implements CommandExecutor {
                 Location armlocation = new Location(Bukkit.getWorld("world"),window.get("window").get(3).get(0).asDouble(),window.get("window").get(3).get(1).asDouble(),window.get("window").get(3).get(2).asDouble());
                 new setSpawnPoints().setStand(armlocation,false);
             }
-            new StartGame().start();
 
         }
         return false;

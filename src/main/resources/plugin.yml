@@ -9,3 +9,4 @@ commands:
   reload-config:
   toggle-particles:
   gold:
+  start:

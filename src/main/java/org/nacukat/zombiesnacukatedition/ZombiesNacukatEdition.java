@@ -81,6 +81,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         totalbulletsMaterial.put(Material.GOLDEN_SHOVEL,new Integer[]{240,288,312,336});
         totalbulletsMaterial.put(Material.FLINT_AND_STEEL,new Integer[]{20,30,36,42});
     }
+    public static boolean inGame = false;
     public static HashMap<Integer,Integer> totalBullets = new HashMap<>();
     public static HashMap<String, Long> Kills = new HashMap<>();
 
@@ -112,13 +113,18 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getCommand("open-shop").setExecutor(new getShopCommend());
         getCommand("reload-config").setExecutor(new reloadConfig());
         getCommand("setmap").setExecutor(new setMap());
+        getCommand("setmap").setTabCompleter(new mapCompleter());
         getCommand("toggle-particles").setExecutor(new toggleParticle());
         getCommand("gold").setExecutor(new giveGold());
+        getCommand("start").setExecutor(new start());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");
 
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();
+        if(scoreboard.getObjective("time") != null){
+            scoreboard.getObjective("time").unregister();
+        }
         if(scoreboard.getObjective("Gold") != null){
             scoreboard.getObjective("Gold").unregister();
         }
@@ -133,9 +139,10 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         kills.setDisplaySlot(DisplaySlot.PLAYER_LIST);
         new BukkitRunnable(){
             List<String> score = new ArrayList<>();
+            int time = 0;
             @Override
             public void run() {
-                int i = 0;
+                int i = 1;
                 for (String entry : scoreboard.getEntries()){
                     scoreboard.resetScores(entry);
                 }
@@ -150,9 +157,12 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                     objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId())).setScore(i);
                     score.add(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId()));
 
+
                     i++;
 
                 }
+                objective.getScore(String.format("%02d", ((int)time/60))+":"+String.format("%02d", ((int)time%60))).setScore(0);
+                if (inGame) time++;
 
             }
         }.runTaskTimer(plugin,0,20);
