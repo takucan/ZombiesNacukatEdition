@@ -4,6 +4,7 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockIgniteEvent;
 import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,7 +19,10 @@ import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class playerAnimation implements Listener {
 
-
+    @EventHandler
+    public void DBS(BlockIgniteEvent e){
+        if(e.getCause().equals(BlockIgniteEvent.IgniteCause.FLINT_AND_STEEL))e.setCancelled(true);
+    }
     @EventHandler
     public void playerAnimation(PlayerAnimationEvent e){
         Player player = e.getPlayer();
@@ -52,7 +56,6 @@ public class playerAnimation implements Listener {
                 item.setItemMeta(meta);
             }
             Ultimates.putIfAbsent(item.getItemMeta().getCustomModelData(), 0);
-            e.setCancelled(true);
             isReloading.putIfAbsent(item.getItemMeta().getCustomModelData(), false);
             if (item.getItemMeta().hasCustomModelData()) {
                 magazines.putIfAbsent(item.getItemMeta().getCustomModelData(), 0L);

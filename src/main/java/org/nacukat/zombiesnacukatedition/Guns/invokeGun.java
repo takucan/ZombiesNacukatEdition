@@ -99,7 +99,6 @@ public class invokeGun implements Listener {
         Ultimates.putIfAbsent(item.getItemMeta().getCustomModelData(),0);
         totalBullets.putIfAbsent(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
 
-        if(isReloading.get(item.getItemMeta().getCustomModelData()))return;
         if (action.equals(Action.RIGHT_CLICK_BLOCK)&&currentMap != null) {
             for(JsonNode ultimates: node.get("Maps").get(currentMap).get("Ultimates")){
                 Location loc = new Location(Bukkit.getWorld("world"), ultimates.get(0).asDouble(), ultimates.get(1).asDouble(), ultimates.get(2).asDouble());
@@ -223,6 +222,7 @@ public class invokeGun implements Listener {
                 }
             }
         }
+        if(isReloading.get(item.getItemMeta().getCustomModelData())||isDown.get(player))return;
         if(totalBullets.get(item.getItemMeta().getCustomModelData())<=0)return;
         player.setExp(1);
         player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));

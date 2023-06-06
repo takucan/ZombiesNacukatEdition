@@ -8,3 +8,4 @@ commands:
   setmap:
   reload-config:
   toggle-particles:
+  gold:

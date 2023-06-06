@@ -18,11 +18,8 @@ import org.nacukat.zombiesnacukatedition.Listeners.PlayerEvent;
 import org.nacukat.zombiesnacukatedition.Listeners.RemoveDropItem;
 import org.nacukat.zombiesnacukatedition.Shops.getShopCommend;
 import org.nacukat.zombiesnacukatedition.Shops.shopListener;
-import org.nacukat.zombiesnacukatedition.comands.reloadConfig;
-import org.nacukat.zombiesnacukatedition.comands.revive;
-import org.nacukat.zombiesnacukatedition.comands.setMap;
+import org.nacukat.zombiesnacukatedition.comands.*;
 import org.nacukat.zombiesnacukatedition.Game.Doors.openingDoor;
-import org.nacukat.zombiesnacukatedition.comands.toggleParticle;
 
 import java.io.File;
 import java.io.IOException;
@@ -116,6 +113,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getCommand("reload-config").setExecutor(new reloadConfig());
         getCommand("setmap").setExecutor(new setMap());
         getCommand("toggle-particles").setExecutor(new toggleParticle());
+        getCommand("gold").setExecutor(new giveGold());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");
 

@@ -25,9 +25,9 @@ public class rayTrace {
             if (totalBullets.get(item.getItemMeta().getCustomModelData()) > 0){
                 if(item.getType() != Material.FLINT_AND_STEEL){
                     totalBullets.put(item.getItemMeta().getCustomModelData(),totalBullets.get(item.getItemMeta().getCustomModelData())-1);
+                    player.setExp(1);
+                    player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
                 }
-                player.setExp(1);
-                player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
                 Block block = null;
 
                 boolean intersect = false;

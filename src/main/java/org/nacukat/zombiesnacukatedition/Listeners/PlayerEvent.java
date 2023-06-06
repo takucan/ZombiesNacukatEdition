@@ -16,6 +16,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.nacukat.zombiesnacukatedition.Game.Windows.checkIsWindowBreak;
@@ -97,6 +98,7 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onChangeSlot(PlayerItemHeldEvent e){
         Player player = e.getPlayer();
+        player.sendMessage(String.valueOf(e.getNewSlot()));
         if (player.getInventory().getItem(e.getNewSlot()) == null)return;
         ItemStack item = player.getInventory().getItem(e.getNewSlot());
         if(!item.hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
@@ -210,9 +212,6 @@ public class PlayerEvent implements Listener {
                 }
             }
         }
-
-
-
 
 
         double count = 15.0;

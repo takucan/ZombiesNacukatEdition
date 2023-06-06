@@ -21,7 +21,7 @@ public class Zombies {
     public void spawnZombie(int num){
         List<LivingEntity> nearbyPoints = new ArrayList<>();
         for (Player player : Bukkit.getWorld("world").getPlayers()){
-            nearbyPoints.addAll(player.getLocation().getNearbyLivingEntities(24,livingEntity -> livingEntity instanceof ArmorStand&&livingEntity.getMetadata("spawn").get(0).asBoolean()));
+            nearbyPoints.addAll(player.getLocation().getNearbyLivingEntities(50,3,livingEntity -> livingEntity instanceof ArmorStand&&livingEntity.getMetadata("spawn").get(0).asBoolean()));
         }
 
         JsonNode info = node.get("Zombies").get(num);

@@ -1,7 +1,6 @@
 package org.nacukat.zombiesnacukatedition.comands;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import net.minecraft.world.level.block.DoubleBlockFinder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
