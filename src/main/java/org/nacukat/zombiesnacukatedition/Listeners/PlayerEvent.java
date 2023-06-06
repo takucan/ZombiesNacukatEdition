@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -92,13 +93,16 @@ public class PlayerEvent implements Listener {
 
     }
     @EventHandler
+    public void shop(EntityPickupItemEvent e){
+        e.setCancelled(true);
+    }
+    @EventHandler
     public void onArm(PlayerArmorStandManipulateEvent e){
         e.setCancelled(true);
     }
     @EventHandler
     public void onChangeSlot(PlayerItemHeldEvent e){
         Player player = e.getPlayer();
-        player.sendMessage(String.valueOf(e.getNewSlot()));
         if (player.getInventory().getItem(e.getNewSlot()) == null)return;
         ItemStack item = player.getInventory().getItem(e.getNewSlot());
         if(!item.hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;

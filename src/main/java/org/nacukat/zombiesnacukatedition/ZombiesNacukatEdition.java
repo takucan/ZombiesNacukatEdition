@@ -28,6 +28,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.UUID;
 
+import static org.nacukat.zombiesnacukatedition.Game.StartGame.currentRound;
+
 public final class ZombiesNacukatEdition extends JavaPlugin {
     public static Plugin plugin;
 
@@ -132,7 +134,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
             scoreboard.getObjective("ZombiesKills").unregister();
         }
         scoreboard.registerNewObjective("ZombiesKills", Criteria.DUMMY,"ZombiesKills");
-        scoreboard.registerNewObjective("Gold", Criteria.DUMMY,"Golds");
+        scoreboard.registerNewObjective("Gold", Criteria.DUMMY,"Zombies");
         Objective objective =scoreboard.getObjective("Gold");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Objective kills = scoreboard.getObjective("ZombiesKills");
@@ -140,6 +142,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         new BukkitRunnable(){
             List<String> score = new ArrayList<>();
             int time = 0;
+            boolean sakkimade = false;
             @Override
             public void run() {
                 int i = 1;
@@ -161,8 +164,26 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                     i++;
 
                 }
-                objective.getScore(String.format("%02d", ((int)time/60))+":"+String.format("%02d", ((int)time%60))).setScore(0);
-                if (inGame) time++;
+                objective.getScore("").setScore(i);
+                objective.getScore("§cRound: "+currentRound).setScore(i+2);
+                int zombiesLeft = 0;
+                if (currentMap != null){
+                    for (JsonNode zombies:node.get("Maps").get(currentMap).get("Rounds").get("waves")){
+                        for (JsonNode zombie:zombies.get("Zombie")){
+                            zombiesLeft += zombie.get(1).asInt();
+                        }
+                    }
+                }
+                objective.getScore("Zombies Left: §a"+zombiesLeft).setScore(i+1);
+
+                if(!inGame)
+                    sakkimade = false;
+                objective.getScore("Time: §a"+String.format("%02d", ((int)time/60))+":"+String.format("%02d", ((int)time%60))).setScore(0);
+                if (inGame) {
+                    if (!sakkimade)time = 0;
+                    sakkimade = true;
+                    time++;
+                }
 
             }
         }.runTaskTimer(plugin,0,20);

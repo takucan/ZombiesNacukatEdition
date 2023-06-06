@@ -32,7 +32,7 @@ public class get01Location {
                     if(findingBlock1){
 
                     }
-                    if(newPosition.getBlock().isPassable()/*Arrays.stream(canWallShot).toList().contains(newPosition.getBlock().getType())*/){
+                    if(/*newPosition.getBlock().isPassable()*/Arrays.stream(canWallShot).toList().contains(newPosition.getBlock().getType())){
 //                        world.spawnParticle(Particle.REDSTONE,newPosition,10, new Particle.DustOptions(Color.LIME,1));
 
                         findingBlock =false;

@@ -34,18 +34,24 @@ public class LeftLightningRod {
         }
         if(nearHitLoc.size() == 0&&nearPlayer.size() == 0)return;
         if (nearPlayer.size()>=nearHitLoc.size()){
+            int i = 0;
+            LightningStrike lightningStrike = player.getWorld().strikeLightningEffect(nearPlayer.stream().toList().get(0).getLocation());
             for(LivingEntity entity :nearPlayer){
-                LightningStrike lightningStrike = player.getWorld().strikeLightningEffect(nearPlayer.stream().toList().get(0).getLocation());
                 entity.setKiller(player);
                 entity.damage(80);
+                i++;
             }
+            player.sendMessage("Hit "+i+" enemies");
             player.setCooldown(Material.BLAZE_ROD,540);
         }else {
             LightningStrike lightningStrike = player.getWorld().strikeLightningEffect(nearHitLoc.stream().toList().get(0).getLocation());
+            int i = 0;
             for(LivingEntity entity :nearHitLoc){
                 entity.setKiller(player);
                 entity.damage(80);
+                i++;
             }
+            player.sendMessage("Hit "+i+" enemies");
             player.setCooldown(Material.BLAZE_ROD,540);
         }
     }

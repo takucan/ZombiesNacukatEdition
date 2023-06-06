@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
-
 public class StartGame {
+    public static int currentRound = 0;
     public static boolean notSpawnedAll = true;
     public void start(){
             inGame = true;
@@ -27,7 +27,7 @@ public class StartGame {
 
 
             double count = 0;
-            int currentRound = 0;
+
             @Override
             public void run() {
                 List<Player> livingPlayers = new ArrayList<>(Bukkit.getOnlinePlayers());
@@ -41,6 +41,7 @@ public class StartGame {
                         player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0F, 0.8F);
                         player.sendTitle("§cGame Over!", "§7You made it to Round "+currentRound,10,100,20);
                         player.sendMessage((count/10)+"s");
+                        currentRound = 0;
                         currentMap = null;
                         inGame = false;
                         cancel();
@@ -68,6 +69,7 @@ public class StartGame {
                             player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0F, 0.8F);
                             player.sendTitle("§aYou Win!", "§7You made it to Round "+node.get("Maps").get(currentMap).get("TotalRound").asText()+"!",10,100,20);
                             player.sendMessage((count/10)+"s");
+                            currentRound = 0;
                             currentMap = null;
                             inGame = false;
                             cancel();
