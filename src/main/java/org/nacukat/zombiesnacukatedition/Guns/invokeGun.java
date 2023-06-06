@@ -5,11 +5,11 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerInteractAtEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -23,6 +23,7 @@ import org.nacukat.zombiesnacukatedition.Guns.gunFunc.dbs;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.get01Location;
 import org.nacukat.zombiesnacukatedition.Skill.RightLightningRod;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Random;
 import java.util.stream.StreamSupport;
@@ -33,11 +34,31 @@ public class invokeGun implements Listener {
 
     private Material[] guns = new Material[]{Material.DIAMOND_PICKAXE,Material.GOLDEN_PICKAXE,Material.GOLDEN_SHOVEL,Material.FLINT_AND_STEEL};
     @EventHandler
-    public void onClickedArmStand(PlayerInteractEntityEvent e){
+    public void onClickedArmStand(PlayerInteractAtEntityEvent e){
         Action action = Action.RIGHT_CLICK_AIR;
         Player player = e.getPlayer();
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-        clickEvent(player,item,action);
+        if(!e.getRightClicked().hasMetadata("Shop")) {
+            clickEvent(player, item, action);
+            return;
+        }
+        if(e.getRightClicked().getMetadata("Shop").get(0).asBoolean()){
+            if(Gold.get(e.getPlayer().getUniqueId())>=e.getRightClicked().getMetadata("price").get(0).asInt()){
+                Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-e.getRightClicked().getMetadata("price").get(0).asInt());
+                if(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString()).equals(item.getType())){
+
+                    totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+                    player.setExp(1);
+                    player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
+
+//                    totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString()))[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+//                    player.setExp(1);
+//                    player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
+                }else {
+                    player.getInventory().addItem(new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString())));
+                }
+            }
+        }
     }
     @EventHandler
     public void playerShoot(PlayerInteractEvent e){
@@ -165,6 +186,8 @@ public class invokeGun implements Listener {
 
                     player.setExp(1);
                     player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
+
+
                     break;
                 }else {
                     return;

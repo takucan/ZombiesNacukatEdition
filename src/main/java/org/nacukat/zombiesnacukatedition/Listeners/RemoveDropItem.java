@@ -4,6 +4,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.Kills;
@@ -22,5 +23,9 @@ public class RemoveDropItem implements Listener {
             Kills.putIfAbsent(e.getEntity().getKiller().getName(), 0L);
             Kills.put(e.getEntity().getKiller().getName(), Kills.get(e.getEntity().getKiller().getName()) + 1L);
         }
+    }
+    @EventHandler
+    public void shopItem(ItemDespawnEvent e){
+        e.setCancelled(true);
     }
 }

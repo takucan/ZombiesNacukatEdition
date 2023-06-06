@@ -1,24 +1,27 @@
 package org.nacukat.zombiesnacukatedition.comands;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Particle;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.material.MaterialData;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.bukkit.util.Vector;
+import org.checkerframework.checker.units.qual.A;
 import org.jetbrains.annotations.NotNull;
 import org.nacukat.zombiesnacukatedition.Game.Doors.setDoors;
 import org.nacukat.zombiesnacukatedition.Game.StartGame;
 import org.nacukat.zombiesnacukatedition.Game.Windows.setSpawnPoints;
 import org.nacukat.zombiesnacukatedition.Game.Windows.setWindows;
 import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
+
+import java.util.List;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -79,6 +82,33 @@ public class setMap implements CommandExecutor {
                 new setSpawnPoints().setStand(location,true);
                 Location armlocation = new Location(Bukkit.getWorld("world"),window.get("window").get(3).get(0).asDouble(),window.get("window").get(3).get(1).asDouble(),window.get("window").get(3).get(2).asDouble());
                 new setSpawnPoints().setStand(armlocation,false);
+            }
+            for (JsonNode shop : node.get("Maps").get(currentMap).get("Shops")){
+                Location location = new Location(Bukkit.getWorld("world"),shop.get("position").get(0).asDouble(),shop.get("position").get(1).asDouble(),shop.get("position").get(2).asDouble());
+                List<Entity> oldShop = Bukkit.getWorld("world").getNearbyEntities(location,0.1,0.1,0.1, entity -> entity.getType().equals(EntityType.DROPPED_ITEM)).stream().toList();
+                List<LivingEntity> oldShopStand = Bukkit.getWorld("world").getNearbyLivingEntities(location,0.1,0.1,0.1, entity -> entity.getType().equals(EntityType.ARMOR_STAND)).stream().toList();
+                if(oldShop.size() >0){
+                    for (Entity en:oldShop){
+                        en.remove();
+                    }
+                }
+                if(oldShopStand.size() >0){
+                    for (LivingEntity en:oldShopStand){
+                        en.setHealth(0);
+                    }
+                }
+
+                ArmorStand shopStand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location,EntityType.ARMOR_STAND);
+                shopStand.setGravity(false);
+
+                Entity entity = Bukkit.getWorld("world").dropItem(location,new ItemStack(Material.valueOf(shop.get("item").asText())));
+                entity.setVelocity(new Vector(0,0,0));
+                entity.setGravity(false);
+                shopStand.setMetadata("Shop",new FixedMetadataValue(plugin,true));
+                shopStand.setMetadata("price",new FixedMetadataValue(plugin,shop.get("price").asInt()));
+                shopStand.setMetadata("item",new FixedMetadataValue(plugin,shop.get("item").asText()));
+                shopStand.setVisible(false);
+                shopStand.setInvulnerable(true);
             }
 
         }

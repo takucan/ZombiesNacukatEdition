@@ -168,7 +168,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                 objective.getScore("§cRound: "+currentRound).setScore(i+2);
                 int zombiesLeft = 0;
                 if (currentMap != null){
-                    for (JsonNode zombies:node.get("Maps").get(currentMap).get("Rounds").get("waves")){
+                    for (JsonNode zombies:node.get("Maps").get(currentMap).get("Rounds").get(currentRound).get("waves")){
                         for (JsonNode zombie:zombies.get("Zombie")){
                             zombiesLeft += zombie.get(1).asInt();
                         }
