@@ -1,6 +1,7 @@
 package org.nacukat.zombiesnacukatedition.comands;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import net.kyori.adventure.text.Component;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
@@ -21,6 +22,7 @@ import org.nacukat.zombiesnacukatedition.Game.Windows.setSpawnPoints;
 import org.nacukat.zombiesnacukatedition.Game.Windows.setWindows;
 import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
 
+import java.awt.*;
 import java.util.List;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
@@ -85,6 +87,7 @@ public class setMap implements CommandExecutor {
             }
             for (JsonNode shop : node.get("Maps").get(currentMap).get("Shops")){
                 Location location = new Location(Bukkit.getWorld("world"),shop.get("position").get(0).asDouble(),shop.get("position").get(1).asDouble(),shop.get("position").get(2).asDouble());
+                Location location1 = new Location(Bukkit.getWorld("world"),shop.get("position").get(0).asDouble(),shop.get("position").get(1).asDouble()-0.5,shop.get("position").get(2).asDouble());
                 List<Entity> oldShop = Bukkit.getWorld("world").getNearbyEntities(location,0.1,0.1,0.1, entity -> entity.getType().equals(EntityType.DROPPED_ITEM)).stream().toList();
                 List<LivingEntity> oldShopStand = Bukkit.getWorld("world").getNearbyLivingEntities(location,0.1,0.1,0.1, entity -> entity.getType().equals(EntityType.ARMOR_STAND)).stream().toList();
                 if(oldShop.size() >0){
@@ -98,12 +101,15 @@ public class setMap implements CommandExecutor {
                     }
                 }
 
-                ArmorStand shopStand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location,EntityType.ARMOR_STAND);
+                ArmorStand shopStand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location1,EntityType.ARMOR_STAND);
                 shopStand.setGravity(false);
 
                 Entity entity = Bukkit.getWorld("world").dropItem(location,new ItemStack(Material.valueOf(shop.get("item").asText())));
                 entity.setVelocity(new Vector(0,0,0));
                 entity.setGravity(false);
+                shopStand.setSmall(true);
+                shopStand.customName(Component.text("§6"+shop.get("price").asText()+" Gold"));
+                shopStand.setCustomNameVisible(true);
                 shopStand.setMetadata("Shop",new FixedMetadataValue(plugin,true));
                 shopStand.setMetadata("price",new FixedMetadataValue(plugin,shop.get("price").asInt()));
                 shopStand.setMetadata("item",new FixedMetadataValue(plugin,shop.get("item").asText()));

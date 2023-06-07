@@ -10,3 +10,4 @@ commands:
   toggle-particles:
   gold:
   start:
+  startCounting:

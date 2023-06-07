@@ -27,6 +27,9 @@ public class rayTrace {
                     totalBullets.put(item.getItemMeta().getCustomModelData(),totalBullets.get(item.getItemMeta().getCustomModelData())-1);
                     player.setExp(1);
                     player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
+                    if(isCounting.get(player.getUniqueId())){
+
+                    }
                 }
                 Block block = null;
 

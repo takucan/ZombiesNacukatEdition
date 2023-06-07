@@ -91,6 +91,13 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
     public static JsonNode node = null;
 
     public static HashMap<UUID,Integer> Gold = new HashMap<>();
+
+    //ZZ,RR,GD,DBS
+    public static HashMap<UUID,Integer[]> gunShoots = new HashMap<>();
+    public static HashMap<UUID,Integer[]> gunClicks = new HashMap<>();
+    public static HashMap<UUID,List<Long>> slotHolding = new HashMap<>();
+    public static HashMap<UUID,Long> lastSlotChange = new HashMap<>();
+    public static HashMap<UUID,Boolean> isCounting = new HashMap<>();
     @Override
     public void onEnable() {
         for (Player player : Bukkit.getWorld("world").getPlayers()){
@@ -119,6 +126,8 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getCommand("toggle-particles").setExecutor(new toggleParticle());
         getCommand("gold").setExecutor(new giveGold());
         getCommand("start").setExecutor(new start());
+        getCommand("startCounting").setExecutor(new startCounting());
+        getCommand("startCounting").setTabCompleter(new startCountingCompleter());
         plugin = this;
         getLogger().info("§bプラグインが起動しました");
 

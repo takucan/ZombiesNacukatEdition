@@ -103,6 +103,15 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onChangeSlot(PlayerItemHeldEvent e){
         Player player = e.getPlayer();
+        isCounting.putIfAbsent(player.getUniqueId(),false);
+        if(isCounting.get(player.getUniqueId())){
+            lastSlotChange.putIfAbsent(player.getUniqueId(),System.currentTimeMillis());
+            slotHolding.putIfAbsent(player.getUniqueId(), new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L,0L,0L,0L,0L)));
+            List<Long> holdings = slotHolding.get(player.getUniqueId());
+            holdings.set(e.getNewSlot(), holdings.get(e.getNewSlot()) +System.currentTimeMillis()-lastSlotChange.get(player.getUniqueId()));
+            slotHolding.put(player.getUniqueId(),holdings);
+            lastSlotChange.put(player.getUniqueId(),System.currentTimeMillis());
+        }
         if (player.getInventory().getItem(e.getNewSlot()) == null)return;
         ItemStack item = player.getInventory().getItem(e.getNewSlot());
         if(!item.hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
