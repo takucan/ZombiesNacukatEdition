@@ -1,14 +1,15 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc.other;
 
-import jline.internal.Nullable;
-import org.bukkit.*;
+import org.bukkit.FluidCollisionMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.scoreboard.*;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
@@ -16,11 +17,9 @@ import org.bukkit.util.Vector;
 import java.util.*;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.totalBullets;
 
 public class rayTrace {
-        public LivingEntity shoot(Player player, ItemStack itemStack, int gold, int critgold, double damage, String hitmessage, String critmessage, double knockBack, Vector direction){
-            ItemStack item = itemStack;
+        public LivingEntity shoot(Player player, ItemStack item, int gold, int critgold, double damage, String hitmessage, String critmessage, double knockBack, Vector direction){
             RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), direction, 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
             lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
             if (totalBullets.get(item.getItemMeta().getCustomModelData()) > 0){
@@ -37,13 +36,12 @@ public class rayTrace {
                             slotShoots.put(player.getUniqueId(), slotShootList);
                         }
 
-                        gunShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L)));
+                        gunShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L,0L)));
                         List<Long> gunShootList = new ArrayList<>(gunShoots.get(player.getUniqueId()));
                         gunShootList.set(guns.indexOf(item.getType()),gunShootList.get(guns.indexOf(item.getType()))+1);
                         gunShoots.put(player.getUniqueId(),gunShootList);
                     }
                 }
-                Block block = null;
 
                 boolean intersect = false;
                 if(rayTraceResult == null)return null;
@@ -57,7 +55,7 @@ public class rayTrace {
                 //        }
 
 
-                List<LivingEntity> near = new ArrayList<>(player.getLocation().getNearbyLivingEntities(10.0D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && entity.getHealth() != 0.0D && entity != player)));
+                List<LivingEntity> near = new ArrayList<>(player.getLocation().getNearbyLivingEntities(10.0D, entity -> (entity != null && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && entity.getHealth() != 0.0D && entity != player)));
                 near.sort(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
                 if (near.size() > 0) {
                     BoundingBox box1 = player.getBoundingBox();
