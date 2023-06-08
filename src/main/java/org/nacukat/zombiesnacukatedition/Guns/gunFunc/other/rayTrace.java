@@ -1,5 +1,6 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc.other;
 
+import jline.internal.Nullable;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -18,17 +19,28 @@ import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.totalBullets;
 
 public class rayTrace {
-        public LivingEntity shoot(Player player, int gold, int critgold, double damage, String hitmessage, String critmessage, double knockBack, Vector direction){
-            ItemStack item = player.getInventory().getItemInMainHand();
+        public LivingEntity shoot(Player player, ItemStack itemStack, int gold, int critgold, double damage, String hitmessage, String critmessage, double knockBack, Vector direction){
+            ItemStack item = itemStack;
             RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), direction, 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
 
             if (totalBullets.get(item.getItemMeta().getCustomModelData()) > 0){
-                if(item.getType() != Material.FLINT_AND_STEEL){
+                if(item.getType() != Material.FLINT_AND_STEEL&&item.getType() != Material.IRON_HOE){
                     totalBullets.put(item.getItemMeta().getCustomModelData(),totalBullets.get(item.getItemMeta().getCustomModelData())-1);
                     player.setExp(1);
                     player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
                     if(isCounting.get(player.getUniqueId())){
 
+                        if(player.getInventory().getHeldItemSlot() < 5&&player.getInventory().getHeldItemSlot()>0) {
+                            slotShoots.putIfAbsent(player.getUniqueId(), new ArrayList<>(Arrays.asList(0L, 0L, 0L, 0L)));
+                            List<Long> slotShootList = new ArrayList<>(slotShoots.get(player.getUniqueId()));
+                            slotShootList.set(player.getInventory().getHeldItemSlot()-1, slotShootList.get(player.getInventory().getHeldItemSlot()-1) + 1);
+                            slotShoots.put(player.getUniqueId(), slotShootList);
+                        }
+
+                        gunShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L)));
+                        List<Long> gunShootList = new ArrayList<>(gunShoots.get(player.getUniqueId()));
+                        gunShootList.set(guns.indexOf(item.getType()),gunShootList.get(guns.indexOf(item.getType()))+1);
+                        gunShoots.put(player.getUniqueId(),gunShootList);
                     }
                 }
                 Block block = null;

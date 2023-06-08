@@ -2,10 +2,12 @@ package org.nacukat.zombiesnacukatedition;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.Plugin;
@@ -23,10 +25,8 @@ import org.nacukat.zombiesnacukatedition.Game.Doors.openingDoor;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 import static org.nacukat.zombiesnacukatedition.Game.StartGame.currentRound;
 
@@ -82,6 +82,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         totalbulletsMaterial.put(Material.GOLDEN_PICKAXE,new Integer[]{70,100,130,160,200,250});
         totalbulletsMaterial.put(Material.GOLDEN_SHOVEL,new Integer[]{240,288,312,336});
         totalbulletsMaterial.put(Material.FLINT_AND_STEEL,new Integer[]{20,30,36,42});
+        totalbulletsMaterial.put(Material.IRON_HOE,new Integer[]{65,80});
     }
     public static boolean inGame = false;
     public static HashMap<Integer,Integer> totalBullets = new HashMap<>();
@@ -93,11 +94,23 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
     public static HashMap<UUID,Integer> Gold = new HashMap<>();
 
     //ZZ,RR,GD,DBS
-    public static HashMap<UUID,Integer[]> gunShoots = new HashMap<>();
-    public static HashMap<UUID,Integer[]> gunClicks = new HashMap<>();
+    public static HashMap<UUID,List<Long>> gunShoots = new HashMap<>();
+    public static HashMap<UUID,List<Long>> gunClicks = new HashMap<>();
+    public static HashMap<UUID,List<Long>> slotShoots = new HashMap<>();
+    public static HashMap<UUID,List<Long>> slotClicks = new HashMap<>();
     public static HashMap<UUID,List<Long>> slotHolding = new HashMap<>();
+    public static HashMap<UUID,Long> damage = new HashMap<>();
     public static HashMap<UUID,Long> lastSlotChange = new HashMap<>();
     public static HashMap<UUID,Boolean> isCounting = new HashMap<>();
+    public static List<Material> guns = new ArrayList<>();
+    static {
+        guns.add(Material.DIAMOND_PICKAXE);
+        guns.add(Material.GOLDEN_SHOVEL);
+        guns.add(Material.GOLDEN_PICKAXE);
+        guns.add(Material.FLINT_AND_STEEL);
+        guns.add(Material.IRON_HOE);
+    }
+    public static int currentWave = 0;
     @Override
     public void onEnable() {
         for (Player player : Bukkit.getWorld("world").getPlayers()){
@@ -143,7 +156,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
             scoreboard.getObjective("ZombiesKills").unregister();
         }
         scoreboard.registerNewObjective("ZombiesKills", Criteria.DUMMY,"ZombiesKills");
-        scoreboard.registerNewObjective("Gold", Criteria.DUMMY,"Zombies");
+        scoreboard.registerNewObjective("Gold", Criteria.DUMMY,"§e§lZombies");
         Objective objective =scoreboard.getObjective("Gold");
         objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         Objective kills = scoreboard.getObjective("ZombiesKills");
@@ -155,10 +168,41 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
             @Override
             public void run() {
                 int i = 1;
+                int scoreNum = 10;
                 for (String entry : scoreboard.getEntries()){
                     scoreboard.resetScores(entry);
                 }
                 int downs = 0;
+                Date date = new Date();
+                SimpleDateFormat sdf = new SimpleDateFormat("MM/dd/yy");
+                objective.getScore("§7"+sdf.format(date)).setScore(scoreNum);
+                scoreNum--;
+
+                objective.getScore("  ").setScore(scoreNum);
+                scoreNum--;
+                objective.getScore("§cRound: "+(currentRound+1)).setScore(scoreNum);
+                scoreNum--;
+                int zombiesLeft = 0;
+                if (currentMap != null){
+                    int wave = 0;
+                    for (JsonNode waves:node.get("Maps").get(currentMap).get("Rounds").get(currentRound).get("waves")) {
+                        if (currentWave == 0||wave>=currentWave){
+                            for (JsonNode zombie : waves.get("Zombie")) {
+                                zombiesLeft += zombie.get(1).asInt();
+                            }
+                        }
+                        wave++;
+                    }
+                }
+                List<LivingEntity> onground = Bukkit.getWorld("world").getLivingEntities();
+                onground.removeIf(liv -> liv.getType().equals(EntityType.PLAYER) || liv.getType().equals(EntityType.ARMOR_STAND));
+//                Bukkit.getPlayer("Nacukat").sendMessage(Component.text("これから何体湧くか:"+zombiesLeft+" 現在いる数:"+onground.size()+" 現在のウェーブ:"+currentWave+" 現在のラウンド:"+currentRound));
+                objective.getScore("Zombies Left: §a"+(zombiesLeft+onground.size())).setScore(scoreNum);
+                scoreNum--;;
+
+                objective.getScore("").setScore(scoreNum);
+                scoreNum--;
+
                 for (Player player : Bukkit.getWorld("world").getPlayers()){
 
                     isDown.putIfAbsent(player,false);
@@ -166,33 +210,33 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                     Kills.putIfAbsent(player.getName(), Long.valueOf(0L));
 
                     kills.getScore(player).setScore(Math.toIntExact(Kills.get(player.getName())));
-                    objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId())).setScore(i);
+                    objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId())).setScore(scoreNum);
+                    scoreNum--;
                     score.add(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId()));
 
 
                     i++;
 
                 }
-                objective.getScore("").setScore(i);
-                objective.getScore("§cRound: "+currentRound).setScore(i+2);
-                int zombiesLeft = 0;
-                if (currentMap != null){
-                    for (JsonNode zombies:node.get("Maps").get(currentMap).get("Rounds").get(currentRound).get("waves")){
-                        for (JsonNode zombie:zombies.get("Zombie")){
-                            zombiesLeft += zombie.get(1).asInt();
-                        }
-                    }
-                }
-                objective.getScore("Zombies Left: §a"+zombiesLeft).setScore(i+1);
 
                 if(!inGame)
                     sakkimade = false;
-                objective.getScore("Time: §a"+String.format("%02d", ((int)time/60))+":"+String.format("%02d", ((int)time%60))).setScore(0);
+                objective.getScore(" ").setScore(scoreNum);
+                scoreNum--;
+                objective.getScore("Time: §a"+String.format("%02d", ((int)time/60))+":"+String.format("%02d", ((int)time%60))).setScore(scoreNum);
+                scoreNum--;
                 if (inGame) {
                     if (!sakkimade)time = 0;
                     sakkimade = true;
                     time++;
                 }
+
+                objective.getScore("Map: §a"+currentMap).setScore(scoreNum);
+                scoreNum--;
+                objective.getScore("   ").setScore(scoreNum);
+                scoreNum--;
+                objective.getScore("§ewww.kusaｗwＷW.com").setScore(scoreNum);
+                scoreNum--;
 
             }
         }.runTaskTimer(plugin,0,20);

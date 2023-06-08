@@ -14,49 +14,67 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ArmorMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.GoldDigger;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.RainbowRifle;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.ZombieZapper;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.dbs;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.*;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.get01Location;
 import org.nacukat.zombiesnacukatedition.Skill.RightLightningRod;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Random;
+import javax.management.Attribute;
+import java.lang.reflect.Array;
+import java.util.*;
 import java.util.stream.StreamSupport;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class invokeGun implements Listener {
 
-    private Material[] guns = new Material[]{Material.DIAMOND_PICKAXE,Material.GOLDEN_PICKAXE,Material.GOLDEN_SHOVEL,Material.FLINT_AND_STEEL};
     @EventHandler
     public void onClickedArmStand(PlayerInteractAtEntityEvent e){
         Action action = Action.RIGHT_CLICK_AIR;
         Player player = e.getPlayer();
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-        if(!e.getRightClicked().hasMetadata("Shop")) {
+        if(!e.getRightClicked().hasMetadata("Shop")) {;
             clickEvent(player, item, action);
             return;
         }
         if(e.getRightClicked().getMetadata("Shop").get(0).asBoolean()){
             if(Gold.get(e.getPlayer().getUniqueId())>=e.getRightClicked().getMetadata("price").get(0).asInt()){
                 Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-e.getRightClicked().getMetadata("price").get(0).asInt());
-                if(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString()).equals(item.getType())){
-
-                    totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
-                    player.setExp(1);
-                    player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
+                switch (e.getRightClicked().getMetadata("type").get(0).asString()){
+                    case "gun":
+                        if(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString()).equals(item.getType())){
+                            totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+                            isReloading.put(item.getItemMeta().getCustomModelData(),false);
+                            player.setExp(1);
+                            player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
 
 //                    totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString()))[Ultimates.get(item.getItemMeta().getCustomModelData())]);
 //                    player.setExp(1);
 //                    player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
-                }else {
-                    player.getInventory().addItem(new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString())));
+                        }else {
+                            player.getInventory().addItem(new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("item").get(0).asString())));
+                        }
+                        break;
+                    case "tops":
+                        ItemStack itemStack1 = new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("met").get(0).asString()));
+                        ItemStack itemStack2 = new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("chest").get(0).asString()));
+                        itemStack1.getItemMeta().setUnbreakable(true);
+                        itemStack2.getItemMeta().setUnbreakable(true);
+                        player.getInventory().setHelmet(itemStack1);
+                        player.getInventory().setChestplate(itemStack2);
+                        break;
+                    case "bottoms":
+                        ItemStack itemStack3 = new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("leg").get(0).asString()));
+                        ItemStack itemStack4 = new ItemStack(Material.valueOf(e.getRightClicked().getMetadata("boots").get(0).asString()));
+                        itemStack3.getItemMeta().setUnbreakable(true);
+                        itemStack4.getItemMeta().setUnbreakable(true);
+                        player.getInventory().setLeggings(itemStack3);
+                        player.getInventory().setBoots(itemStack4);
+                        break;
                 }
+
             }
         }
     }
@@ -76,6 +94,18 @@ public class invokeGun implements Listener {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
                         if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
                             itemMeta.setDisplayName("§6§lZombie Zapper Ultimate");
+                            Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
+                            item.setItemMeta(itemMeta);
+                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
+                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                            item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                        }
+                    }
+                    if (item.getType().equals(Material.IRON_HOE)) {
+                        Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
+                        if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
+                            itemMeta.setDisplayName("§6§lShotgun Ultimate");
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                             item.setItemMeta(itemMeta);
                             Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
@@ -182,6 +212,7 @@ public class invokeGun implements Listener {
                                 break;
                         }
                     }
+                    isReloading.put(item.getItemMeta().getCustomModelData(),false);
                     totalBullets.put(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
 
                     player.setExp(1);
@@ -189,8 +220,6 @@ public class invokeGun implements Listener {
 
 
                     break;
-                }else {
-                    return;
                 }
             }
         }
@@ -200,6 +229,16 @@ public class invokeGun implements Listener {
     public void clickEvent(Player player, ItemStack item, Action action){
         isDown.putIfAbsent(player,false);
         Gold.putIfAbsent(player.getUniqueId(),0);
+        isCounting.putIfAbsent(player.getUniqueId(),false);
+        if(isCounting.get(player.getUniqueId())){
+            if(player.getInventory().getHeldItemSlot() < 5&&player.getInventory().getHeldItemSlot()>0) {
+                slotClicks.putIfAbsent(player.getUniqueId(), new ArrayList<>(Arrays.asList(0L, 0L, 0L, 0L)));
+                List<Long> slotClickList = new ArrayList<>(slotClicks.get(player.getUniqueId()));
+                slotClickList.set(player.getInventory().getHeldItemSlot()-1, slotClickList.get(player.getInventory().getHeldItemSlot()-1) + 1);
+                slotClicks.put(player.getUniqueId(), slotClickList);
+            }
+
+        }
 
         if (item == null)return;
 
@@ -232,12 +271,18 @@ public class invokeGun implements Listener {
             }
         }
 
-        if(!action.isRightClick()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
+        if(!action.isRightClick()||!(item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
 
         ItemMeta meta = item.getItemMeta();
         HasQF.putIfAbsent(player.getName(),false);
         HasFB.putIfAbsent(player.getName(),false);
-
+        isCounting.putIfAbsent(player.getUniqueId(),false);
+        if(isCounting.get(player.getUniqueId())&&guns.contains(player.getInventory().getItemInMainHand().getType())){
+            gunClicks.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L)));
+            List<Long> gunClickList = new ArrayList<>(gunClicks.get(player.getUniqueId()));
+            gunClickList.set(guns.indexOf(player.getInventory().getItemInMainHand().getType()),gunClickList.get(guns.indexOf(player.getInventory().getItemInMainHand().getType()))+1);
+            gunClicks.put(player.getUniqueId(),gunClickList);
+        }
 
         if (!meta.hasCustomModelData()) {
             Random random = new Random();
@@ -256,6 +301,8 @@ public class invokeGun implements Listener {
                 case FLINT_AND_STEEL:
                     meta.setDisplayName("§6Double Barrel Shotgun");
                     break;
+                case IRON_HOE:
+                    meta.setDisplayName("§6Shotgun");
             }
             item.setItemMeta(meta);
         }
@@ -264,7 +311,6 @@ public class invokeGun implements Listener {
         totalBullets.putIfAbsent(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
 
         if(isReloading.get(item.getItemMeta().getCustomModelData())||isDown.get(player))return;
-        if(totalBullets.get(item.getItemMeta().getCustomModelData())<=0)return;
         player.setExp(1);
         player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
 
@@ -281,6 +327,8 @@ public class invokeGun implements Listener {
             case FLINT_AND_STEEL:
                 new dbs().doubleBarrel(lastShotTimes,isReloading,magazines,player,item);
                 break;
+            case IRON_HOE:
+                new ShotGun().shotgun(lastShotTimes,isReloading,magazines,player,item);
             default:
         }
 

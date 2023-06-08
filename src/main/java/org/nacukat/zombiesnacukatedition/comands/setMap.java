@@ -42,8 +42,8 @@ public class setMap implements CommandExecutor {
                 }
             }.runTaskTimer(plugin, 0L, 30L); // 1秒 = 20 tick
             for (JsonNode door : node.get("Maps").get(currentMap).get("Doors")){
-                Location start = new Location(Bukkit.getWorld("world"),door.get("startPoint").get(0).asInt(),door.get("startPoint").get(1).asInt(),door.get("startPoint").get(2).asInt());
-                Location end = new Location(Bukkit.getWorld("world"),door.get("endPoint").get(0).asInt(),door.get("endPoint").get(1).asInt(),door.get("endPoint").get(2).asInt());
+                Location start = new Location(Bukkit.getWorld("world"),node.get("Maps").get(currentMap).get("DoorFrom").get(door.get("type").asInt()).get(0).get(0).asInt(),node.get("Maps").get(currentMap).get("DoorFrom").get(door.get("type").asInt()).get(0).get(1).asInt(),node.get("Maps").get(currentMap).get("DoorFrom").get(door.get("type").asInt()).get(0).get(2).asInt());
+                Location end = new Location(Bukkit.getWorld("world"),node.get("Maps").get(currentMap).get("DoorFrom").get(door.get("type").asInt()).get(1).get(0).asInt(),node.get("Maps").get(currentMap).get("DoorFrom").get(door.get("type").asInt()).get(1).get(1).asInt(),node.get("Maps").get(currentMap).get("DoorFrom").get(door.get("type").asInt()).get(1).get(2).asInt());
                 Location target = new Location(Bukkit.getWorld("world"),door.get("position").get(0).asInt(),door.get("position").get(1).asInt(),door.get("position").get(2).asInt());
 
                 new setDoors().setDoor(start,end,target);
@@ -104,17 +104,37 @@ public class setMap implements CommandExecutor {
                 ArmorStand shopStand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location1,EntityType.ARMOR_STAND);
                 shopStand.setGravity(false);
 
-                Entity entity = Bukkit.getWorld("world").dropItem(location,new ItemStack(Material.valueOf(shop.get("item").asText())));
-                entity.setVelocity(new Vector(0,0,0));
-                entity.setGravity(false);
-                shopStand.setSmall(true);
-                shopStand.customName(Component.text("§6"+shop.get("price").asText()+" Gold"));
-                shopStand.setCustomNameVisible(true);
-                shopStand.setMetadata("Shop",new FixedMetadataValue(plugin,true));
-                shopStand.setMetadata("price",new FixedMetadataValue(plugin,shop.get("price").asInt()));
-                shopStand.setMetadata("item",new FixedMetadataValue(plugin,shop.get("item").asText()));
                 shopStand.setVisible(false);
                 shopStand.setInvulnerable(true);
+                shopStand.setCustomNameVisible(true);
+                shopStand.customName(Component.text("§6"+shop.get("price").asText()+" Gold"));
+                shopStand.setMetadata("spawn",new FixedMetadataValue(plugin,false));
+                shopStand.setMetadata("Shop",new FixedMetadataValue(plugin,true));
+                shopStand.setMetadata("price",new FixedMetadataValue(plugin,shop.get("price").asInt()));
+                shopStand.setMetadata("type",new FixedMetadataValue(plugin,shop.get("type").asText()));
+                switch (shop.get("type").asText()){
+                    case "gun":
+                        shopStand.setMetadata("item",new FixedMetadataValue(plugin,shop.get("item").asText()));
+                        shopStand.setSmall(true);
+                        Entity entity = Bukkit.getWorld("world").dropItem(location,new ItemStack(Material.valueOf(shop.get("item").asText())));
+                        entity.setVelocity(new Vector(0,0,0));
+                        entity.setGravity(false);
+                        break;
+                    case "tops":
+                        shopStand.setMetadata("met",new FixedMetadataValue(plugin,shop.get("item").get(0).asText()));
+                        shopStand.setMetadata("chest",new FixedMetadataValue(plugin,shop.get("item").get(1).asText()));
+                        shopStand.getEquipment().setHelmet(new ItemStack(Material.valueOf(shop.get("item").get(0).asText())));
+                        shopStand.getEquipment().setChestplate(new ItemStack(Material.valueOf(shop.get("item").get(1).asText())));
+                        break;
+                    case "bottoms":
+                        shopStand.setMetadata("leg",new FixedMetadataValue(plugin,shop.get("item").get(0).asText()));
+                        shopStand.setMetadata("boots",new FixedMetadataValue(plugin,shop.get("item").get(1).asText()));
+                        shopStand.getEquipment().setLeggings(new ItemStack(Material.valueOf(shop.get("item").get(0).asText())));
+                        shopStand.getEquipment().setBoots(new ItemStack(Material.valueOf(shop.get("item").get(1).asText())));
+                        break;
+                }
+
+
             }
 
         }

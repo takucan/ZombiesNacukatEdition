@@ -88,7 +88,7 @@ public class GoldDigger {
         Particle particle = Particle.REDSTONE;
 
         new spawnParticle().spawn(particle,dustOptions,player);
-        new rayTrace().shoot(player,10,15,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
+        new rayTrace().shoot(player,item,10,15,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
 
         if (item.getAmount() > 1)
           item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData()).longValue()) - 1);

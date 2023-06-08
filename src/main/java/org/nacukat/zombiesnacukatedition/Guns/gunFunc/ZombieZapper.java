@@ -50,7 +50,7 @@ public class ZombieZapper {
                 Particle particle = Particle.CRIT_MAGIC;
                 new spawnParticle().spawn(particle,dustOptions,player);
 
-                LivingEntity livingEntity = new rayTrace().shoot(player,15,20,damage,hitmessage,critmessage,0.5,player.getEyeLocation().getDirection());
+                LivingEntity livingEntity = new rayTrace().shoot(player,item,15,20,damage,hitmessage,critmessage,0.5,player.getEyeLocation().getDirection());
                 if(livingEntity != null){
                     int count = 0;
                     List<LivingEntity> entities = new ArrayList<>(livingEntity.getLocation().getNearbyLivingEntities(3.0D, 3.0D, 3.0D));

@@ -15,6 +15,7 @@ import org.bukkit.scoreboard.ScoreboardManager;
 import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
@@ -35,52 +36,66 @@ public class StartGame {
                 for (Player player : livingPlayers){
                     if(!isDown.get(player)) allDead = false;
                 }
+
                 if(allDead){
                     currentMap = null;
                     for (Player player : Bukkit.getWorld("world").getPlayers()){
                         player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0F, 0.8F);
                         player.sendTitle("§cGame Over!", "§7You made it to Round "+currentRound,10,100,20);
-                        player.sendMessage((count/10)+"s");
+                        player.sendMessage((count/20)+"s");
                         currentRound = 0;
                         currentMap = null;
                         inGame = false;
-                        cancel();
                     }
-                    cancel();
                 }
                 count++;
                 List<LivingEntity> arrayList = Bukkit.getWorld("world").getLivingEntities().stream().filter(livingEntity -> livingEntity.getType() != EntityType.PLAYER&&livingEntity.getType() != EntityType.ARMOR_STAND).toList();
 
                 if (!notSpawnedAll &&arrayList.size() == 0||count ==1){
-                    if(currentRound< node.get("Maps").get(currentMap).get("TotalRound").asInt()){
+                    if(currentRound+1< node.get("Maps").get(currentMap).get("TotalRound").asInt()){
 
+                        if(count!=1) currentRound++;
                         new StartWave().start(currentRound);
                         for (Player player : Bukkit.getWorld("world").getPlayers()){
                             player.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).setBaseValue(0.3D);
                             player.playSound(player.getLocation(), Sound.ENTITY_WITHER_SPAWN, 1.0F, 0.8F);
                             player.sendTitle("§cRound "+(currentRound+1), "");
+                            currentWave = 0;
                             if(currentRound != 0){
-                                player.sendMessage((count/10)+"s");
+                                player.sendMessage((count/20)+"s");
                             }
                         }
-                        currentRound++;
                     }else {
                         for (Player player : Bukkit.getWorld("world").getPlayers()){
                             player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0F, 0.8F);
                             player.sendTitle("§aYou Win!", "§7You made it to Round "+node.get("Maps").get(currentMap).get("TotalRound").asText()+"!",10,100,20);
-                            player.sendMessage((count/10)+"s");
+                            player.sendMessage((count/20)+"s");
                             currentRound = 0;
                             currentMap = null;
                             inGame = false;
-                            cancel();
                         }
                     }
 
                 }
 
+                for (Player player : Bukkit.getOnlinePlayers()){
+                    slotHolding.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L)));
+                    List<Long> holding = slotHolding.get(player.getUniqueId());
+                    isCounting.put(player.getUniqueId(),true);
+                    if(player.getInventory().getHeldItemSlot() < 5&&player.getInventory().getHeldItemSlot()>0){
+                        holding.set(player.getInventory().getHeldItemSlot()-1, holding.get(player.getInventory().getHeldItemSlot()-1)+1L);
+                        slotHolding.put(player.getUniqueId(),holding);
+                    }
+                    if(!inGame){
+                        new showResult().show(player);
+                    }
+                }
+                if(!inGame){
+                    cancel();
+                }
 
 
             }
-        }.runTaskTimer(plugin,0,2);
+        }.runTaskTimer(plugin,0,1);
     }
 }

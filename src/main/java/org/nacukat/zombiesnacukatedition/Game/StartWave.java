@@ -11,7 +11,6 @@ public class StartWave {
     public void start(int round){
         notSpawnedAll =true;
         new BukkitRunnable(){
-            int currentWave = 0;
             @Override
             public void run() {
                 if(currentMap == null){

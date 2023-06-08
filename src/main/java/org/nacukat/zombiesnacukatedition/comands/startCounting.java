@@ -8,6 +8,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
+import org.nacukat.zombiesnacukatedition.Game.showResult;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -24,13 +29,15 @@ public class startCounting implements CommandExecutor {
                 return false;
             }
             new BukkitRunnable(){
-                int countDown = 59;
-                double set = Integer.parseInt(strings[1]) * 10;
+                int countDown = 99;
+                double set = Integer.parseInt(strings[1]) * 20;
+                boolean Result  =false;
+                List<Long> holding = new ArrayList<>(Arrays.asList(0L,0L,0L,0L));
                 @Override
                 public void run() {
                     if(!strings[0].equals("seconds"))cancel();
-                    if(countDown > 10){
-                        player.sendTitle(String.valueOf(countDown /10),null,0,3,0);
+                    if(countDown > 20){
+                        player.sendTitle(String.valueOf(countDown /20),null,0,3,0);
 
                         countDown--;
                     }else {
@@ -38,26 +45,26 @@ public class startCounting implements CommandExecutor {
                             case "seconds":
                                 if(set >0){
                                     set--;
-                                    player.sendActionBar(Component.text(set /10));
+                                    player.sendActionBar(Component.text(String.format("%.2f",set /20)));
                                     isCounting.put(player.getUniqueId(),true);
-                                }else {
-                                    player.sendActionBar(Component.text("§bEnded!"));
-                                    isCounting.put(player.getUniqueId(),false);
-                                    String str = "スロットを保持していた時間: ";
-                                    for (double time : slotHolding.get(player.getUniqueId())){
-                                        time /=1000;
-                                        str = str+time+"s - ";
+                                    if(player.getInventory().getHeldItemSlot() < 5&&player.getInventory().getHeldItemSlot()>0){
+                                        holding.set(player.getInventory().getHeldItemSlot()-1, holding.get(player.getInventory().getHeldItemSlot()-1)+1L);
+                                        slotHolding.put(player.getUniqueId(),holding);
                                     }
-                                    player.sendMessage(str);
-                                    slotHolding.remove(player.getUniqueId());
+                                }else {
+                                    Result = true;
+                                }
+                            default:
+                                if(Result) {
+                                    new showResult().show(player);
                                     cancel();
                                 }
-                                break;
+
 
                         }
                     }
                 }
-            }.runTaskTimer(plugin,0,2);
+            }.runTaskTimer(plugin,0,1);
 
         }
         return false;

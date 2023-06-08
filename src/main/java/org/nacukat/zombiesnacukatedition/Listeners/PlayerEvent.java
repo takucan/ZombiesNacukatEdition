@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -33,6 +34,16 @@ public class PlayerEvent implements Listener {
 
     public HashMap<Player, Double> Count = new HashMap<>();
 
+    @EventHandler
+    public void counting(EntityDamageByEntityEvent e){
+        if(!(e.getDamager() instanceof Player))return;
+        Player player = (Player) e.getDamager();
+        isCounting.putIfAbsent(player.getUniqueId(),false);
+        if(isCounting.get(player.getUniqueId())){
+            damage.putIfAbsent(player.getUniqueId(),0L);
+            damage.put(player.getUniqueId(), (long) (damage.get(player.getUniqueId())+e.getDamage()));
+        }
+    }
 
     @EventHandler
     public void onPlayerLogin(PlayerJoinEvent e) {
@@ -103,15 +114,15 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onChangeSlot(PlayerItemHeldEvent e){
         Player player = e.getPlayer();
-        isCounting.putIfAbsent(player.getUniqueId(),false);
-        if(isCounting.get(player.getUniqueId())){
-            lastSlotChange.putIfAbsent(player.getUniqueId(),System.currentTimeMillis());
-            slotHolding.putIfAbsent(player.getUniqueId(), new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L,0L,0L,0L,0L)));
-            List<Long> holdings = slotHolding.get(player.getUniqueId());
-            holdings.set(e.getNewSlot(), holdings.get(e.getNewSlot()) +System.currentTimeMillis()-lastSlotChange.get(player.getUniqueId()));
-            slotHolding.put(player.getUniqueId(),holdings);
-            lastSlotChange.put(player.getUniqueId(),System.currentTimeMillis());
-        }
+//        isCounting.putIfAbsent(player.getUniqueId(),false);
+//        if(isCounting.get(player.getUniqueId())){
+//            lastSlotChange.putIfAbsent(player.getUniqueId(),System.currentTimeMillis());
+//            slotHolding.putIfAbsent(player.getUniqueId(), new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L,0L,0L,0L,0L)));
+//            List<Long> holdings = slotHolding.get(player.getUniqueId());
+//            holdings.set(e.getNewSlot(), holdings.get(e.getNewSlot()) +System.currentTimeMillis()-lastSlotChange.get(player.getUniqueId()));
+//            slotHolding.put(player.getUniqueId(),holdings);
+//            lastSlotChange.put(player.getUniqueId(),System.currentTimeMillis());
+//        }
         if (player.getInventory().getItem(e.getNewSlot()) == null)return;
         ItemStack item = player.getInventory().getItem(e.getNewSlot());
         if(!item.hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;

@@ -80,7 +80,7 @@ public class RainbowRifle {
                 String critmessage = "§6+7 Gold (Critical Hit)";
                 new spawnParticle().rainbow(player);
 
-                new rayTrace().shoot(player,5,7,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
+                new rayTrace().shoot(player,item,5,7,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
                 if (item.getAmount() > 1)
                     item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
@@ -111,7 +111,7 @@ public class RainbowRifle {
                             String critmessage = "§6+7 Gold (Critical Hit)";
                             new spawnParticle().rainbow(player);
 
-                            new rayTrace().shoot(player,5,7,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
+                            new rayTrace().shoot(player,item,5,7,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
                             if (item.getAmount() > 1)
                                 item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                             magazine--;
