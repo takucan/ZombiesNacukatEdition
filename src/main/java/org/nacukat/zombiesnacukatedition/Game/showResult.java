@@ -1,14 +1,11 @@
 package org.nacukat.zombiesnacukatedition.Game;
 
 import net.kyori.adventure.text.Component;
-import net.md_5.bungee.api.ChatColor;
-import org.bukkit.Color;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -18,119 +15,95 @@ public class showResult {
             player.sendActionBar(Component.text("§bEnded!"));
             isCounting.put(player.getUniqueId(),false);
             player.sendMessage(Component.text("§a-----------------------"));
-            String str = "§e§lスロットを保持していた時間§r§7>> §a";
+            StringBuilder str = new StringBuilder("§e§lスロットを保持していた時間§r§7>> §a");
 
             {
                 int i = 0;
                 for (double time : slotHolding.get(player.getUniqueId())) {
                     time /= 20;
                     if(i == 3){
-                        str = str + time + "s";
+                        str.append(time).append("s");
                     }else {
-                        str = str + time + "s §7- §a";
+                        str.append(time).append("s §7- §a");
                     }
                     i++;
                 }
             }
-            player.sendMessage(str);
+            player.sendMessage(str.toString());
             slotHolding.remove(player.getUniqueId());
 
-            String str1 = "§e§lスロットごとのクリック数§r§7>> §a";
+            StringBuilder str1 = new StringBuilder("§e§lスロットごとのクリック数§r§7>> §a");
             {
                 int i = 0;
                 slotClicks.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L)));
                 for (Long slotclick : slotClicks.get(player.getUniqueId())) {
                     if(i == 3){
-                        str1 = str1 + slotclick;
+                        str1.append(slotclick);
                     }else {
-                        str1 = str1 + slotclick + " §7- §a";
+                        str1.append(slotclick).append(" §7- §a");
                     }
                     i++;
                 }
             }
-            player.sendMessage(str1);
+            player.sendMessage(str1.toString());
             slotClicks.remove(player.getUniqueId());
 
-            String str4 = "§e§lスロットごとの撃った回数§r§7>> §a";
+            StringBuilder str4 = new StringBuilder("§e§lスロットごとの撃った回数§r§7>> §a");
             {
                 int i = 0;
                 slotShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L)));
                 for (Long slotShoot : slotShoots.get(player.getUniqueId())) {
                     if(i == 3) {
-                        str4 = str4 + slotShoot;
+                        str4.append(slotShoot);
                     }else {
-                        str4 = str4 + slotShoot + " §7- §a";
+                        str4.append(slotShoot).append(" §7- §a");
                     }
                     i++;
                 }
             }
-            player.sendMessage(str4);
+            player.sendMessage(str4.toString());
             slotShoots.remove(player.getUniqueId());
 
 
-            String str2 = "§e§l銃ごとのクリック数§r§7>> ";
-            String str21 = "                  ";
+            StringBuilder str2 = new StringBuilder("§e§l銃ごとのクリック数§r§7>> ");
+            StringBuilder str21 = new StringBuilder("                  ");
             int i = 0;
             gunClicks.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L)));
             for (Long gunclick : gunClicks.get(player.getUniqueId())){
-                switch (i){
-                    case 0:
-                        str2 = str2+"§3ZZ§f: §a"+gunclick;
-                        break;
-                    case 1:
-                        str2 = str2+" §7/ §eRR§f: §a"+gunclick;
-                        break;
-                    case 2:
-                        str2 = str2+" §7/ §6GD§f: §a"+gunclick;
-                        break;
-                    case 3:
-                        str21 = str21+" §7/ §fD§7B§8S§f: §a"+gunclick;
-                        break;
-                    case 4:
-                        str21 = str21+" §7/ §fS§7G§f: §a"+gunclick;
-                        break;
-                    case 5:
-                        str21 = str21+" §7/ "+ ChatColor.of(new java.awt.Color(201, 127, 71)) +"Pis§f: §a"+gunclick;
-                        break;
+                switch (i) {
+                    case 0 -> str2.append("§3ZZ§f: §a").append(gunclick);
+                    case 1 -> str2.append(" §7/ §eRR§f: §a").append(gunclick);
+                    case 2 -> str2.append(" §7/ §6GD§f: §a").append(gunclick);
+                    case 3 -> str21.append(" §7/ §fD§7B§8S§f: §a").append(gunclick);
+                    case 4 -> str21.append(" §7/ §fS§7G§f: §a").append(gunclick);
+                    case 5 ->str21.append(" §7/ ").append(TextColor.color(201, 127, 71)).append("Pis§f: §a").append(gunclick);
                 }
                 i++;
             }
-            player.sendMessage(str2);
-            player.sendMessage(str21);
+            player.sendMessage(str2.toString());
+            player.sendMessage(str21.toString());
             gunClicks.remove(player.getUniqueId());
 
 
 
-            String str3 = "§e§l銃ごとの撃った回数§r§7>> §a";
-            String str31 = "                  ";
+            StringBuilder str3 = new StringBuilder("§e§l銃ごとの撃った回数§r§7>> §a");
+            StringBuilder str31 = new StringBuilder("                  ");
             int i1 = 0;
             gunShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L)));
             for (Long gunshoot : gunShoots.get(player.getUniqueId())){
-                switch (i1){
-                    case 0:
-                        str3 = str3+"§3ZZ§f: §a"+gunshoot;
-                        break;
-                    case 1:
-                        str3 = str3+" §7/ §eRR§f: §a"+gunshoot;
-                        break;
-                    case 2:
-                        str3 = str3+" §7/ §6GD§f: §a"+gunshoot;
-                        break;
-                    case 3:
-                        str31 = str31+" §7/ §fD§7B§8S§f: §a"+gunshoot;
-                        break;
-                    case 4:
-                        str31 = str31+" §7/ §fS§7G§f: §a"+gunshoot;
-                        break;
-                    case 5:
-                        str31 = str31+" §7/ "+ ChatColor.of(new java.awt.Color(201, 127, 71)) +"Pis§f: §a"+gunshoot;
-                        break;
+                switch (i1) {
+                    case 0 -> str3.append("§3ZZ§f: §a").append(gunshoot);
+                    case 1 -> str3.append(" §7/ §eRR§f: §a").append(gunshoot);
+                    case 2 -> str3.append(" §7/ §6GD§f: §a").append(gunshoot);
+                    case 3 -> str31.append(" §7/ §fD§7B§8S§f: §a").append(gunshoot);
+                    case 4 -> str31.append(" §7/ §fS§7G§f: §a").append(gunshoot);
+                    case 5 ->str31.append(" §7/ ").append(TextColor.color(201, 127, 71)).append("Pis§f: §a").append(gunshoot);
                 }
                 i1++;
             }
             gunShoots.remove(player.getUniqueId());
-            player.sendMessage(str3);
-            player.sendMessage(str31);
+            player.sendMessage(str3.toString());
+            player.sendMessage(str31.toString());
             player.sendMessage(Component.text("§e§l与ダメージ§r§7>> §a"+damage.get(player.getUniqueId())));
             player.sendMessage(Component.text("     §7(Slot: 2, 3, 4, 5)"));
             player.sendMessage(Component.text("§a-----------------------"));

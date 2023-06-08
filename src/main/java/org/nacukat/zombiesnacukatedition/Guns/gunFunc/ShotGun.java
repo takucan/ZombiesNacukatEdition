@@ -15,7 +15,7 @@ import java.util.*;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class ShotGun {
-  public boolean shotgun(HashMap<Integer, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
+  public void shotgun(HashMap<Integer, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
 
     lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
     long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
@@ -27,23 +27,23 @@ public class ShotGun {
     int period = 30;
     long fireRate = 1400L;
     double knockBack = 0.5D;
-    switch (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).intValue()) {
+    switch (Ultimates.get(item.getItemMeta().getCustomModelData())) {
       case 1:
         fireRate = 1000L;
         period = 20;
         break;
       case 2:
     } 
-    if (HasQF.get(player.getName()).booleanValue())
+    if (HasQF.get(player.getName()))
       fireRate = (long)(fireRate * 0.75D);
     if (magazine <= 0L) {
-      isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
-      boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, period, player);
+      isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
+      new reload().reloadGun(item, isReloading, magazines, clipSize, period, player);
       player.sendMessage("reload");
     } 
     if (magazine > 0L) {
       if (magazine > clipSize) {
-        magazine = Long.valueOf(clipSize);
+        magazine = clipSize;
         item.setAmount((int)clipSize);
       } 
       if (currentTime - lastShotTime >= fireRate) {
@@ -56,7 +56,6 @@ public class ShotGun {
           double randomPitchOffset = Math.toRadians(Math.random() * 15.0D - 7.0D);
           direction.rotateAroundY(randomYawOffset);
           direction.rotateAroundX(randomPitchOffset);
-          boolean intersect = false;
 
 
           String critmessage = "§6+12 Gold (Critical Hit)";
@@ -95,7 +94,7 @@ public class ShotGun {
 
             loc = loc.add(direction.multiply(0.6+random.nextDouble(2)));
             Particle particle = Particle.SMOKE_NORMAL;
-            for (Player player1 : Bukkit.getWorld("world").getPlayers()){
+            for (Player player1 : Objects.requireNonNull(Bukkit.getWorld("world")).getPlayers()){
               if(showParticle.get(player1)){
                 player1.spawnParticle(particle,loc,0);
               }
@@ -103,17 +102,16 @@ public class ShotGun {
 
         } 
         if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).longValue()) - 1);
-        magazine = Long.valueOf(magazine - 1L);
-        magazines.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), magazine);
-        lastShotTimes.put(item.getItemMeta().getCustomModelData(), Long.valueOf(currentTime));
+          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+        magazine = magazine - 1L;
+        magazines.put(item.getItemMeta().getCustomModelData(), magazine);
+        lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
         if (magazine <= 0L) {
-          isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
-          boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, period, player);
+          isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
+          new reload().reloadGun(item, isReloading, magazines, clipSize, period, player);
           player.sendMessage("reload");
         } 
       } 
-    } 
-    return false;
+    }
   }
 }

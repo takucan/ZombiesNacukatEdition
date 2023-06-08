@@ -4,7 +4,6 @@ import org.bukkit.FluidCollisionMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -100,7 +99,7 @@ public class rayTrace {
                         livingEntity.setMaximumNoDamageTicks(0);
                     }
                     player.sendMessage(hitmessage);
-                    if (!Arrays.asList(bosses).contains(livingEntity.getCustomName())) {
+                    if (!Arrays.asList(bosses).contains(Objects.requireNonNull(livingEntity.customName()).toString())) {
                         livingEntity.damage(damage, player);
                         Vector velocity = player.getLocation().getDirection().multiply(knockBack);
                         livingEntity.setVelocity(velocity);
@@ -111,6 +110,6 @@ public class rayTrace {
                 }
             }
 
-            return (LivingEntity) rayTraceResult.getHitEntity();
+            return (LivingEntity) Objects.requireNonNull(rayTraceResult).getHitEntity();
         }
 }
