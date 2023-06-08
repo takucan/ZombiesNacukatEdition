@@ -1,18 +1,10 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
 import org.bukkit.Bukkit;
-import org.bukkit.FluidCollisionMode;
-import org.bukkit.Location;
 import org.bukkit.Sound;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.util.BoundingBox;
-import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
 
 import java.util.*;
@@ -20,7 +12,7 @@ import java.util.*;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class RainbowRifle {
-    public boolean rainbowRifle(final HashMap<Integer, Boolean> isShootingRR, HashMap<ItemStack, Long> lastShotTimes, final HashMap<Integer, Boolean> isReloading, final HashMap<Integer, Long> magazines, final Player player, final ItemStack item) {
+    public boolean rainbowRifle(HashMap<Integer, Boolean> isShootingRR, HashMap<Integer, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading,  HashMap<Integer, Long> magazines,  Player player,  ItemStack item) {
         long clipSize = 30L;
         final Sound shootSound = Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST_FAR;
         final float volume = 0.4F;
@@ -30,9 +22,11 @@ public class RainbowRifle {
         double damage = 6.0D;
         double period = 30.0D;
         int burst = 2;
-        Long lastShotTime = lastShotTimes.get(item);
+        lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
+        long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
         long currentTime = System.currentTimeMillis();
-        Long magazine = magazines.get(item.getItemMeta().getCustomModelData());
+        magazines.putIfAbsent(item.getItemMeta().getCustomModelData(),clipSize);
+        long magazine = magazines.get(item.getItemMeta().getCustomModelData());
         switch (Ultimates.get(item.getItemMeta().getCustomModelData())) {
             case 1:
                 clipSize = 36L;
@@ -57,20 +51,15 @@ public class RainbowRifle {
         }
         if (HasQF.get(player.getName()))
             fireRate = (long)(fireRate * 0.75D);
+        isShootingRR.putIfAbsent(item.getItemMeta().getCustomModelData(), false);
         Boolean isShooting = isShootingRR.get(item.getItemMeta().getCustomModelData());
-        isShootingRR.putIfAbsent(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
-        if (magazine == null) {
-            magazine = clipSize;
-            magazines.put(item.getItemMeta().getCustomModelData(), magazine);
-            item.setAmount(Math.toIntExact(clipSize));
-        }
         if (magazine > 0L) {
             if (magazine > clipSize) {
                 magazine = clipSize;
                 item.setAmount((int)clipSize);
             }
             if ((isShooting == null || !isShooting) && (
-                    lastShotTime == null || currentTime - lastShotTime >= fireRate)) {
+                    currentTime - lastShotTime >= fireRate)) {
                 isShootingRR.put(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
                 for (Player player1 : Bukkit.getServer().getOnlinePlayers())
                     player1.playSound(player, shootSound, volume, pich);
@@ -85,7 +74,7 @@ public class RainbowRifle {
                     item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
                 magazines.put(item.getItemMeta().getCustomModelData(), magazine);
-                lastShotTimes.put(item, currentTime);
+                lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
                 if (magazine <= 0L) {
                     isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
                     new reload().reloadGun(item, isReloading,  magazines, clipSize, (long)period, player);

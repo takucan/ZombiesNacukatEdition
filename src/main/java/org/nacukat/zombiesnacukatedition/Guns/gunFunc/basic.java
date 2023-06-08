@@ -45,7 +45,7 @@ public class basic {
       } 
       if (lastShotTime == null || currentTime - lastShotTime.longValue() >= fireRate) {
         for (Player player1 : Bukkit.getServer().getOnlinePlayers())
-          player1.playSound((Entity)player, shootSound, volume, pich); 
+          player1.playSound(player, shootSound, volume, pich);
         if (lastShotTime != null);
         String hitmessage = "Hit";
         boolean intersect = false;
@@ -60,13 +60,13 @@ public class basic {
         near.sort(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
         if (near.size() > 0) {
           BoundingBox box1 = player.getBoundingBox();
-          BoundingBox box2 = ((LivingEntity)near.get(0)).getBoundingBox();
+          BoundingBox box2 = near.get(0).getBoundingBox();
           box1.expand(0.1D);
           box2.expand(0.2D);
           boolean intersects = (box1.getMinX() <= box2.getMaxX() && box1.getMaxX() >= box2.getMinX() && box1.getMinY() <= box2.getMaxY() && box1.getMaxY() >= box2.getMinY() && box1.getMinZ() <= box2.getMaxZ() && box1.getMaxZ() >= box2.getMinZ());
           if (intersects) {
             intersect = true;
-            hitEntity = (Entity)near.get(0);
+            hitEntity = near.get(0);
           } 
         } 
         if (hitEntity != null) {
@@ -78,9 +78,9 @@ public class basic {
             if (isCritical) {
               damage *= 1.2D;
               hitmessage = "§6+20 Gold (Critical Hit)";
-              player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
+              player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
             } else {
-              player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
+              player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
             } 
           } else if (player.getEyeLocation().getDirection().getY() > 0.0D) {
             Random random = new Random();
@@ -88,18 +88,18 @@ public class basic {
             if (rand <= 90) {
               damage *= 1.2D;
               hitmessage = "§6+20 Gold (Critical Hit)";
-              player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
+              player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
             } 
           } else {
-            player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
+            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
           } 
           if (livingEntity.getNoDamageTicks() != 0 || livingEntity.getMaximumNoDamageTicks() != 0) {
             livingEntity.setNoDamageTicks(0);
             livingEntity.setMaximumNoDamageTicks(0);
           } 
           player.sendMessage(hitmessage);
-          if (!Arrays.<String>asList(bosses).contains(livingEntity.getCustomName())) {
-            livingEntity.damage(damage, (Entity)player);
+          if (!Arrays.asList(bosses).contains(livingEntity.getCustomName())) {
+            livingEntity.damage(damage, player);
             Vector velocity = player.getLocation().getDirection().multiply(knockBack);
             livingEntity.setVelocity(velocity);
             livingEntity.setVelocity(velocity);
@@ -109,7 +109,7 @@ public class basic {
           } 
         } 
         if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(((Long)magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).longValue()) - 1); 
+          item.setAmount(Math.toIntExact(magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).longValue()) - 1);
         magazine = Long.valueOf(magazine.longValue() - 1L);
         magazines.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), magazine);
         lastShotTimes.put(item, Long.valueOf(currentTime));

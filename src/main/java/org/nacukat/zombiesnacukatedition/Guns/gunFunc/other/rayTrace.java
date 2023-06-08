@@ -22,7 +22,7 @@ public class rayTrace {
         public LivingEntity shoot(Player player, ItemStack itemStack, int gold, int critgold, double damage, String hitmessage, String critmessage, double knockBack, Vector direction){
             ItemStack item = itemStack;
             RayTraceResult rayTraceResult = player.getWorld().rayTrace(player.getEyeLocation(), direction, 70.0D, FluidCollisionMode.NEVER, true, 0.2D, entity -> (entity instanceof LivingEntity && entity.getType() != EntityType.PLAYER && entity.getType() != EntityType.ARMOR_STAND && ((LivingEntity)entity).getHealth() != 0.0D && entity != player));
-
+            lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
             if (totalBullets.get(item.getItemMeta().getCustomModelData()) > 0){
                 if(item.getType() != Material.FLINT_AND_STEEL&&item.getType() != Material.IRON_HOE){
                     totalBullets.put(item.getItemMeta().getCustomModelData(),totalBullets.get(item.getItemMeta().getCustomModelData())-1);
@@ -61,12 +61,12 @@ public class rayTrace {
                 near.sort(Comparator.comparingDouble(entity -> entity.getLocation().distance(player.getLocation())));
                 if (near.size() > 0) {
                     BoundingBox box1 = player.getBoundingBox();
-                    BoundingBox box2 = ((LivingEntity)near.get(0)).getBoundingBox();
+                    BoundingBox box2 = near.get(0).getBoundingBox();
                     box2.expand(0.2D,0D,0.2D);
                     boolean intersects = (box1.getMinX() <= box2.getMaxX() && box1.getMaxX() >= box2.getMinX() && box1.getMinY() <= box2.getMaxY() && box1.getMaxY() >= box2.getMinY() && box1.getMinZ() <= box2.getMaxZ() && box1.getMaxZ() >= box2.getMinZ());
                     if (intersects) {
                         intersect = true;
-                        hitEntity = (Entity)near.get(0);
+                        hitEntity = near.get(0);
                     }
                 }
                 if (hitEntity != null) {
@@ -78,10 +78,10 @@ public class rayTrace {
                         if (isCritical) {
                             damage *= 1.2D;
                             hitmessage = critmessage;
-                            player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
+                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())+critgold);
                         } else {
-                            player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
+                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())+gold);
                         }
                     } else if (player.getEyeLocation().getDirection().getY() > 0.0D) {
@@ -90,11 +90,11 @@ public class rayTrace {
                         if (rand <= 90) {
                             damage *= 1.2D;
                             hitmessage = critmessage;
-                            player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
+                            player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 1.5F);
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())+critgold);
                         }
                     } else {
-                        player.playSound((Entity)player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
+                        player.playSound(player, Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.6F, 2.0F);
                         Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())+gold);
                     }
                     if (livingEntity.getNoDamageTicks() != 0 || livingEntity.getMaximumNoDamageTicks() != 0) {
@@ -103,7 +103,7 @@ public class rayTrace {
                     }
                     player.sendMessage(hitmessage);
                     if (!Arrays.asList(bosses).contains(livingEntity.getCustomName())) {
-                        livingEntity.damage(damage, (Entity)player);
+                        livingEntity.damage(damage, player);
                         Vector velocity = player.getLocation().getDirection().multiply(knockBack);
                         livingEntity.setVelocity(velocity);
                     } else {

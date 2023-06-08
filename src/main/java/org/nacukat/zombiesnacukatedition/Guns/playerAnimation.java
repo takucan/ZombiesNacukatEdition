@@ -56,7 +56,7 @@ public class playerAnimation implements Listener {
                         meta.setDisplayName("§6Shotgun");
                         break;
                     case WOODEN_HOE:
-                        meta.setDisplayName("§Pistol");
+                        meta.setDisplayName("§6Pistol");
                         break;
                 }
                 item.setItemMeta(meta);

@@ -23,7 +23,7 @@ public class getShopCommend implements CommandExecutor {
     HasFR.putIfAbsent(player.getName(),false);
     EHs.putIfAbsent(player.getName(),0);
 
-    Inventory ShopGUI = Bukkit.createInventory((InventoryHolder)player, 45, "Shop");
+    Inventory ShopGUI = Bukkit.createInventory(player, 45, "Shop");
     ItemStack QF = new ItemStack(Material.REDSTONE);
     ItemStack FB = new ItemStack(Material.GHAST_TEAR);
     ItemStack EH = new ItemStack(Material.GOLD_NUGGET);

@@ -35,7 +35,7 @@ public class invokeGun implements Listener {
         Action action = Action.RIGHT_CLICK_AIR;
         Player player = e.getPlayer();
         ItemStack item = e.getPlayer().getInventory().getItemInMainHand();
-        if(!e.getRightClicked().hasMetadata("Shop")) {;
+        if(!e.getRightClicked().hasMetadata("Shop")) {
             clickEvent(player, item, action);
             return;
         }
@@ -92,48 +92,48 @@ public class invokeGun implements Listener {
                     ItemMeta itemMeta = item.getItemMeta();
                     if (item.getType().equals(Material.DIAMOND_PICKAXE)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                        if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
+                        if (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).equals(Integer.valueOf(0))) {
                             itemMeta.setDisplayName("§6§lZombie Zapper Ultimate");
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                             item.setItemMeta(itemMeta);
                             Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                            item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                         }
                     }
                     if (item.getType().equals(Material.IRON_HOE)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                        if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
+                        if (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).equals(Integer.valueOf(0))) {
                             itemMeta.setDisplayName("§6§lShotgun Ultimate");
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                             item.setItemMeta(itemMeta);
                             Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                            item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                         }
                     }
                     if (item.getType().equals(Material.WOODEN_HOE)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                        if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
+                        if (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).equals(Integer.valueOf(0))) {
                             itemMeta.setDisplayName("§6§lPistol Ultimate");
                             Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                             item.setItemMeta(itemMeta);
                             Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
-                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                            item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                             item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                         }
                     }
                     if (item.getType().equals(Material.FLINT_AND_STEEL)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                        switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
+                        switch (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).intValue()) {
                             case 0:
                                 itemMeta.setDisplayName("§6§lDouble Barrel Shotgun Ultimate");
                                 Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
-                                item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                                item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                                 item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
@@ -156,12 +156,12 @@ public class invokeGun implements Listener {
                     }
                     if (item.getType().equals(Material.GOLDEN_SHOVEL)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                        switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
+                        switch (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).intValue()) {
                             case 0:
                                 itemMeta.setDisplayName("§6§lRainbow Rifle Ultimate");
                                 Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
-                                item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                                item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                                 item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
@@ -184,12 +184,12 @@ public class invokeGun implements Listener {
                     }
                     if (item.getType().equals(Material.GOLDEN_PICKAXE)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
-                        switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
+                        switch (Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).intValue()) {
                             case 0:
                                 itemMeta.setDisplayName("§6§lGold Digger Ultimate");
                                 Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
                                 item.setItemMeta(itemMeta);
-                                item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                                item.addItemFlags(ItemFlag.HIDE_ENCHANTS);
                                 item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
                                 player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                                 Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
@@ -262,7 +262,7 @@ public class invokeGun implements Listener {
         if (item.getType().equals(Material.IRON_SWORD)&&action.isRightClick()) {
             isBlock.putIfAbsent(player, Boolean.valueOf(false));
             lastBlock.putIfAbsent(player, Long.valueOf(0L));
-            if (System.currentTimeMillis() - ((Long)lastBlock.get(player)).longValue() >= 100L) {
+            if (System.currentTimeMillis() - lastBlock.get(player).longValue() >= 100L) {
                 isBlock.replace(player, Boolean.valueOf(true));
                 ItemStack shield = new ItemStack(Material.SHIELD);
                 ItemMeta itemMeta = shield.getItemMeta();

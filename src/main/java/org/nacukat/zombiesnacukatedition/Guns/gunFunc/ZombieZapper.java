@@ -5,9 +5,6 @@ import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.bukkit.util.BoundingBox;
-import org.bukkit.util.RayTraceResult;
-import org.bukkit.util.Vector;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
 
 import java.util.*;
@@ -16,13 +13,15 @@ import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class ZombieZapper {
 
-    public boolean zombieZapper(HashMap<ItemStack, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
+    public boolean zombieZapper(HashMap<Integer, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
         long clipSize = 10L;
         double damage = 12.0D;
         long period = 40L;
-        Long lastShotTime = lastShotTimes.get(item);
+        lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
+        long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
         long currentTime = System.currentTimeMillis();
-        Long magazine = magazines.get(item.getItemMeta().getCustomModelData());
+        magazines.putIfAbsent(item.getItemMeta().getCustomModelData(),clipSize);
+        long magazine = magazines.get(item.getItemMeta().getCustomModelData());
         int fireRate = 500;
         if (Ultimates.get(item.getItemMeta().getCustomModelData()) == 1) {
             damage = 18.0D;
@@ -30,17 +29,12 @@ public class ZombieZapper {
         }
         if (HasQF.get(player.getName()))
             fireRate = (int)(fireRate * 0.75D);
-        if (magazine == null) {
-            magazine = clipSize;
-            magazines.put(item.getItemMeta().getCustomModelData(), magazine);
-            item.setAmount(Math.toIntExact(clipSize));
-        }
         if (magazine > 0L) {
             if (magazine > clipSize) {
                 magazine = clipSize;
                 item.setAmount((int)clipSize);
             }
-            if (lastShotTime == null || currentTime - lastShotTime >= fireRate) {
+            if (currentTime - lastShotTime >= fireRate) {
                 for (Player player1 : Bukkit.getServer().getOnlinePlayers())
                     player1.playSound(player, Sound.ITEM_FLINTANDSTEEL_USE, 0.4F, 0.5F);
                 String hitmessage = "§6+15 Gold";
@@ -89,7 +83,7 @@ public class ZombieZapper {
                     item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
                 magazines.put(item.getItemMeta().getCustomModelData(), magazine);
-                lastShotTimes.put(item, currentTime);
+                lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
                 if (magazine <= 0L) {
                     isReloading.replace(item.getItemMeta().getCustomModelData(), true);
                     boolean a = new reload().reloadGun(item, isReloading, magazines, 10L, period, player);

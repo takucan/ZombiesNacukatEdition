@@ -15,7 +15,7 @@ import java.util.HashMap;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class Pistol {
-    public boolean Pistol( HashMap<ItemStack, Long> lastShotTimes, final HashMap<Integer, Boolean> isReloading, final HashMap<Integer, Long> magazines, final Player player, final ItemStack item) {
+    public boolean Pistol(HashMap<Integer, Long> lastShotTimes, final HashMap<Integer, Boolean> isReloading, final HashMap<Integer, Long> magazines, final Player player, final ItemStack item) {
         long clipSize = 10L;
         final Sound shootSound = Sound.ENTITY_IRON_GOLEM_HURT;
         final float volume = 0.4F;
@@ -25,9 +25,11 @@ public class Pistol {
         double damage = 6.0D;
         double period = 30.0D;
         int burst = 0;
-        Long lastShotTime = lastShotTimes.get(item);
+        lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
+        long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
         long currentTime = System.currentTimeMillis();
-        Long magazine = magazines.get(item.getItemMeta().getCustomModelData());
+        magazines.putIfAbsent(item.getItemMeta().getCustomModelData(),clipSize);
+        long magazine = magazines.get(item.getItemMeta().getCustomModelData());
 
 
         if (Ultimates.get(item.getItemMeta().getCustomModelData()) == 1) {
@@ -38,18 +40,12 @@ public class Pistol {
         }
         if (HasQF.get(player.getName()))
             fireRate = (long)(fireRate * 0.75D);
-        if (magazine == null) {
-            magazine = clipSize;
-            magazines.put(item.getItemMeta().getCustomModelData(), magazine);
-            item.setAmount(Math.toIntExact(clipSize));
-        }
         if (magazine > 0L) {
             if (magazine > clipSize) {
                 magazine = clipSize;
                 item.setAmount((int)clipSize);
             }
-            if (lastShotTime == null || currentTime - lastShotTime >= fireRate) {
-                lastShotTimes.put(item,currentTime);
+            if (currentTime - lastShotTime >= fireRate) {
                 for (Player player1 : Bukkit.getServer().getOnlinePlayers())
                     player1.playSound(player, shootSound, volume, pich);
                 String hitmessage = "§6+10 Gold";
@@ -63,6 +59,7 @@ public class Pistol {
                     item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
                 magazines.put(item.getItemMeta().getCustomModelData(), magazine);
+                lastShotTimes.put(item.getItemMeta().getCustomModelData(),currentTime);
                 if (magazine <= 0L) {
                     isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
                     new reload().reloadGun(item, isReloading,  magazines, clipSize, (long)period, player);
@@ -74,7 +71,7 @@ public class Pistol {
                     new BukkitRunnable() {
                         long magazine = magazines.get(item.getItemMeta().getCustomModelData());
 
-                        int count = 0;
+                        final int count = 0;
 
                         public void run() {
                             for (Player player1 : Bukkit.getServer().getOnlinePlayers())
@@ -98,7 +95,6 @@ public class Pistol {
                         }
                     }.runTaskLater(plugin, 2 );
                 }
-                lastShotTimes.put(item, currentTime);
 
             }
         }

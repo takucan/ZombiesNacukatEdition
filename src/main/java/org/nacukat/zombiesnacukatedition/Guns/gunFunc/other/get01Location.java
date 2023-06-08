@@ -50,7 +50,7 @@ public class get01Location {
                         near.sort(Comparator.comparingDouble(entity -> entity.getLocation().distance(newPosition)));
                         if (near.size() > 0) {
                             BoundingBox box1 = new BoundingBox(newPosition.getX(), newPosition.getY(), newPosition.getZ(), newPosition.x(), newPosition.y(), newPosition.z());
-                            BoundingBox box2 = ((LivingEntity)near.get(0)).getBoundingBox();
+                            BoundingBox box2 = near.get(0).getBoundingBox();
                             box2.expand(0.2D,0D,0.2D);
                             boolean intersects = (box1.getMinX() <= box2.getMaxX() && box1.getMaxX() >= box2.getMinX() && box1.getMinY() <= box2.getMaxY() && box1.getMaxY() >= box2.getMinY() && box1.getMinZ() <= box2.getMaxZ() && box1.getMaxZ() >= box2.getMinZ());
                             if (intersects) {

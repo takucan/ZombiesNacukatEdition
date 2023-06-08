@@ -1,16 +1,9 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
 import org.bukkit.*;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.BoundingBox;
-import org.bukkit.util.RayTraceResult;
 import org.bukkit.util.Vector;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.CheckInBlock;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.isCritical;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
 import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
 
@@ -19,8 +12,10 @@ import java.util.*;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class dbs {
-  public boolean doubleBarrel(HashMap<ItemStack, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
-    Long lastShotTime = lastShotTimes.get(item);
+  public boolean doubleBarrel(HashMap<Integer, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
+
+    lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
+    long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
     Long magazine = magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData()));
     long clipSize = 2L;
     long currentTime = System.currentTimeMillis();
@@ -62,10 +57,9 @@ public class dbs {
         magazine = Long.valueOf(clipSize);
         item.setAmount((int)clipSize);
       } 
-      if (lastShotTime == null || currentTime - lastShotTime.longValue() >= fireRate) {
+      if ( currentTime - lastShotTime >= fireRate) {
         for (Player player1 : Bukkit.getServer().getOnlinePlayers())
-          player1.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 0.6F, 1.2F); 
-        if (lastShotTime != null);
+          player1.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_LARGE_BLAST, 0.6F, 1.2F);
         String hitmessage = "§6+8 Gold";
         for (int i = 0; i <= 10; i++) {
           Vector direction = player.getEyeLocation().getDirection();
@@ -120,10 +114,10 @@ public class dbs {
 
         } 
         if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(((Long)magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).longValue()) - 1); 
+          item.setAmount(Math.toIntExact(magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).longValue()) - 1);
         magazine = Long.valueOf(magazine.longValue() - 1L);
         magazines.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), magazine);
-        lastShotTimes.put(item, Long.valueOf(currentTime));
+        lastShotTimes.put(item.getItemMeta().getCustomModelData(), Long.valueOf(currentTime));
         if (magazine.longValue() <= 0L) {
           isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
           boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, period, player);

@@ -62,7 +62,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         HeadSizes.put(EntityType.ZOMBIE, new Double[] {0.51D, 0.6D, 0.51D, 0.3D});
         HeadSizes.put(EntityType.IRON_GOLEM, new Double[] {0.9D, 0.63D, 0.9D, 0.315D});
     }
-    public static HashMap<ItemStack, Long> lastShotTimes = new HashMap<>();
+    public static HashMap<Integer, Long> lastShotTimes = new HashMap<>();
 
     public static HashMap<Integer, Boolean> isShootingRR = new HashMap<>();
 
@@ -164,7 +164,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         Objective kills = scoreboard.getObjective("ZombiesKills");
         kills.setDisplaySlot(DisplaySlot.PLAYER_LIST);
         new BukkitRunnable(){
-            List<String> score = new ArrayList<>();
+            final List<String> score = new ArrayList<>();
             int time = 0;
             boolean sakkimade = false;
             @Override
@@ -200,7 +200,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                 onground.removeIf(liv -> liv.getType().equals(EntityType.PLAYER) || liv.getType().equals(EntityType.ARMOR_STAND));
 //                Bukkit.getPlayer("Nacukat").sendMessage(Component.text("これから何体湧くか:"+zombiesLeft+" 現在いる数:"+onground.size()+" 現在のウェーブ:"+currentWave+" 現在のラウンド:"+currentRound));
                 objective.getScore("Zombies Left: §a"+(zombiesLeft+onground.size())).setScore(scoreNum);
-                scoreNum--;;
+                scoreNum--;
 
                 objective.getScore("").setScore(scoreNum);
                 scoreNum--;
@@ -225,7 +225,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                     sakkimade = false;
                 objective.getScore(" ").setScore(scoreNum);
                 scoreNum--;
-                objective.getScore("Time: §a"+String.format("%02d", ((int)time/60))+":"+String.format("%02d", ((int)time%60))).setScore(scoreNum);
+                objective.getScore("Time: §a"+String.format("%02d", (time /60))+":"+String.format("%02d", (time %60))).setScore(scoreNum);
                 scoreNum--;
                 if (inGame) {
                     if (!sakkimade)time = 0;

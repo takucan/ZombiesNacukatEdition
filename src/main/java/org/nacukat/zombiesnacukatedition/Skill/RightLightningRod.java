@@ -19,18 +19,18 @@ public class RightLightningRod {
 
         Location loc1 = player.getLocation();
         Location loc2;
-        Collection<LivingEntity> nearPlayer = loc1.getNearbyLivingEntities(5, entity -> (entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof ArmorStand) && ((LivingEntity)entity).getHealth() != 0.0D));
+        Collection<LivingEntity> nearPlayer = loc1.getNearbyLivingEntities(5, entity -> (entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof ArmorStand) && entity.getHealth() != 0.0D));
         Collection<LivingEntity> nearHitLoc;
         if(rayTraceResult != null){
             loc2= rayTraceResult.getHitPosition().toLocation(player.getWorld());
-            nearHitLoc = loc2.getNearbyLivingEntities(4.5,entity -> (entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof ArmorStand) && ((LivingEntity)entity).getHealth() != 0.0D));
+            nearHitLoc = loc2.getNearbyLivingEntities(4.5,entity -> (entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof ArmorStand) && entity.getHealth() != 0.0D));
         }else {
             Location eyeLocation = player.getEyeLocation();
             Vector direction = eyeLocation.getDirection();
 
             double distance = 7;
             loc2 = eyeLocation.add(direction.multiply(distance));
-            nearHitLoc = loc2.getNearbyLivingEntities(5,entity -> (entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof ArmorStand) && ((LivingEntity)entity).getHealth() != 0.0D));
+            nearHitLoc = loc2.getNearbyLivingEntities(5,entity -> (entity instanceof LivingEntity && !(entity instanceof Player) && !(entity instanceof ArmorStand) && entity.getHealth() != 0.0D));
         }
         if(nearHitLoc.size() == 0&&nearPlayer.size() == 0)return;
         if (nearPlayer.size()>=nearHitLoc.size()){

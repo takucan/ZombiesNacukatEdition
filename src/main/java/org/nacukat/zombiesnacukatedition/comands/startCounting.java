@@ -23,7 +23,7 @@ public class startCounting implements CommandExecutor {
         Player player = ((Player) commandSender).getPlayer();
         if(strings.length == 2){
             try {
-                ;Integer.parseInt(strings[1]);
+                Integer.parseInt(strings[1]);
             } catch (NumberFormatException e) {
                 player.sendMessage(Component.text("数字を入力してくさだい"));
                 return false;
@@ -32,7 +32,7 @@ public class startCounting implements CommandExecutor {
                 int countDown = 99;
                 double set = Integer.parseInt(strings[1]) * 20;
                 boolean Result  =false;
-                List<Long> holding = new ArrayList<>(Arrays.asList(0L,0L,0L,0L));
+                final List<Long> holding = new ArrayList<>(Arrays.asList(0L,0L,0L,0L));
                 @Override
                 public void run() {
                     if(!strings[0].equals("seconds"))cancel();
@@ -41,26 +41,22 @@ public class startCounting implements CommandExecutor {
 
                         countDown--;
                     }else {
-                        switch (strings[0]){
-                            case "seconds":
-                                if(set >0){
-                                    set--;
-                                    player.sendActionBar(Component.text(String.format("%.2f",set /20)));
-                                    isCounting.put(player.getUniqueId(),true);
-                                    if(player.getInventory().getHeldItemSlot() < 5&&player.getInventory().getHeldItemSlot()>0){
-                                        holding.set(player.getInventory().getHeldItemSlot()-1, holding.get(player.getInventory().getHeldItemSlot()-1)+1L);
-                                        slotHolding.put(player.getUniqueId(),holding);
-                                    }
-                                }else {
-                                    Result = true;
+                        if (strings[0].equals("seconds")) {
+                            if (set > 0) {
+                                set--;
+                                player.sendActionBar(Component.text(String.format("%.2f", set / 20)));
+                                isCounting.put(player.getUniqueId(), true);
+                                if (player.getInventory().getHeldItemSlot() < 5 && player.getInventory().getHeldItemSlot() > 0) {
+                                    holding.set(player.getInventory().getHeldItemSlot() - 1, holding.get(player.getInventory().getHeldItemSlot() - 1) + 1L);
+                                    slotHolding.put(player.getUniqueId(), holding);
                                 }
-                            default:
-                                if(Result) {
-                                    new showResult().show(player);
-                                    cancel();
-                                }
-
-
+                            } else {
+                                Result = true;
+                            }
+                        }
+                        if (Result) {
+                            new showResult().show(player);
+                            cancel();
                         }
                     }
                 }

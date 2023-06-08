@@ -26,39 +26,39 @@ public class shopListener implements Listener {
       if (e.getClick().isLeftClick())
         switch (e.getSlot()) {
           case 10:
-            player.getInventory().addItem(new ItemStack[] { new ItemStack(Material.DIAMOND_PICKAXE) });
+            player.getInventory().addItem(new ItemStack(Material.DIAMOND_PICKAXE));
             break;
           case 28:
             HasQF.putIfAbsent(player.getName(), Boolean.valueOf(false));
-            if (!((Boolean)HasQF.get(player.getName())).booleanValue()) {
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
-              e.getInventory().getItem(e.getSlot()).addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+            if (!HasQF.get(player.getName()).booleanValue()) {
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
+              e.getInventory().getItem(e.getSlot()).addItemFlags(ItemFlag.HIDE_ENCHANTS);
               e.getInventory().getItem(e.getSlot()).addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
               HasQF.put(player.getName(), Boolean.valueOf(true));
               break;
             } 
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
             break;
           case 30:
             HasFB.putIfAbsent(player.getName(), Boolean.valueOf(false));
-            if (!((Boolean) HasFB.get(player.getName())).booleanValue()) {
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
-              e.getInventory().getItem(e.getSlot()).addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+            if (!HasFB.get(player.getName()).booleanValue()) {
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
+              e.getInventory().getItem(e.getSlot()).addItemFlags(ItemFlag.HIDE_ENCHANTS);
               e.getInventory().getItem(e.getSlot()).addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
               HasFB.put(player.getName(), Boolean.valueOf(true));
               break;
             } 
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
             break;
           case 32:
             EHs.putIfAbsent(player.getName(), 0);
             if (EHs.get(player.getName()) < 10) {
               EHs.put(player.getName(), EHs.get(player.getName())+1);
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
               String ehValue = "I";
               switch (EHs.get(player.getName())){
                 case 1:
@@ -92,30 +92,30 @@ public class shopListener implements Listener {
                   ehValue = "X";
                   break;
               }
-              player.sendMessage("" + ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Extra Health Perk "+ehValue + ChatColor.YELLOW + "!");
+              player.sendMessage(ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Extra Health Perk "+ehValue + ChatColor.YELLOW + "!");
               player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
               PotionEffect potionEffect = new PotionEffect(PotionEffectType.HEALTH_BOOST,-1,EHs.get(player.getName())-1,false,false,false);
               player.addPotionEffect(potionEffect);
-              e.getInventory().getItem(e.getSlot()).addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+              e.getInventory().getItem(e.getSlot()).addItemFlags(ItemFlag.HIDE_ENCHANTS);
               e.getInventory().getItem(e.getSlot()).addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
 
               break;
             }
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
             break;
           case 34:
             HasFR.putIfAbsent(player.getName(), Boolean.valueOf(false));
-            if (!((Boolean) HasFR.get(player.getName())).booleanValue()) {
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
-              e.getInventory().getItem(e.getSlot()).addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+            if (!HasFR.get(player.getName()).booleanValue()) {
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
+              e.getInventory().getItem(e.getSlot()).addItemFlags(ItemFlag.HIDE_ENCHANTS);
               e.getInventory().getItem(e.getSlot()).addUnsafeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
               HasFR.put(player.getName(), Boolean.valueOf(true));
               break;
             }
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
             break;
         }  
       if (e.getClick().isRightClick())
@@ -123,51 +123,51 @@ public class shopListener implements Listener {
           case 28:
             HasQF.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (HasQF.get(player.getName()).booleanValue()) {
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
               e.getInventory().getItem(e.getSlot()).removeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")));
               HasQF.replace(player.getName(), Boolean.valueOf(false));
               break;
             } 
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
             break;
           case 30:
             HasFB.putIfAbsent(player.getName(), Boolean.valueOf(false));
-            if (((Boolean) HasFB.get(player.getName())).booleanValue()) {
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
+            if (HasFB.get(player.getName()).booleanValue()) {
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
               e.getInventory().getItem(e.getSlot()).removeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")));
               HasFB.replace(player.getName(), Boolean.valueOf(false));
               break;
             } 
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
             break;
           case 32:
             EHs.putIfAbsent(player.getName(),0);
             if(EHs.get(player.getName()) != 0){
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
               e.getInventory().getItem(e.getSlot()).removeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")));
               EHs.replace(player.getName(), 0);
               player.removePotionEffect(PotionEffectType.HEALTH_BOOST);
               break;
             }
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
             break;
           case 34:
             HasFR.putIfAbsent(player.getName(), Boolean.valueOf(false));
-            if (((Boolean)HasFR.get(player.getName())).booleanValue()) {
-              player.playSound((Entity)player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
-              player.sendMessage("" + ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
+            if (HasFR.get(player.getName()).booleanValue()) {
+              player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
+              player.sendMessage(ChatColor.YELLOW + "You deactivated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
               e.getInventory().getItem(e.getSlot()).removeEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")));
               HasFR.replace(player.getName(), Boolean.valueOf(false));
               break;
             }
-            player.playSound((Entity)player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
-            player.sendMessage("" + ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
+            player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
+            player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
             break;
         }  
     } 
