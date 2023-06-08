@@ -89,7 +89,7 @@ public class dbs {
             slotShoots.put(player.getUniqueId(), slotShootList);
           }
 
-          gunShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L)));
+          gunShoots.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L,0L)));
           List<Long> gunShootList = new ArrayList<>(gunShoots.get(player.getUniqueId()));
           gunShootList.set(guns.indexOf(item.getType()),gunShootList.get(guns.indexOf(item.getType()))+1);
           gunShoots.put(player.getUniqueId(),gunShootList);

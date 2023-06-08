@@ -59,24 +59,24 @@ public class GoldDigger {
         period = 20.0D;
         break;
     } 
-    if (HasQF.get(player.getName()).booleanValue())
+    if (HasQF.get(player.getName()))
       fireRate = (long)(fireRate * 0.75D); 
     if (magazine == null) {
-      magazine = Long.valueOf(clipSize);
-      magazines.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), magazine);
+      magazine = clipSize;
+      magazines.put(item.getItemMeta().getCustomModelData(), magazine);
       item.setAmount(Math.toIntExact(clipSize));
     } 
-    if (magazine.longValue() <= 0L) {
-      isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
+    if (magazine <= 0L) {
+      isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.valueOf(true));
       boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, (long)period, player);
       player.sendMessage("reload");
     } 
-    if (magazine.longValue() > 0L) {
-      if (magazine.longValue() > clipSize) {
-        magazine = Long.valueOf(clipSize);
+    if (magazine > 0L) {
+      if (magazine > clipSize) {
+        magazine = clipSize;
         item.setAmount((int)clipSize);
       } 
-      if (lastShotTime == null || currentTime - lastShotTime.longValue() >= fireRate) {
+      if (lastShotTime == null || currentTime - lastShotTime >= fireRate) {
 
         for (Player player1 : Bukkit.getServer().getOnlinePlayers())
           player1.playSound((Entity)player, shootSound, volume, pich); 
@@ -91,12 +91,12 @@ public class GoldDigger {
         new rayTrace().shoot(player,item,10,15,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
 
         if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData()).longValue()) - 1);
+          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
         magazine = magazine - 1L;
         magazines.put(item.getItemMeta().getCustomModelData(), magazine);
         lastShotTimes.put(item, currentTime);
-        if (magazine.longValue() <= 0L) {
-          isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
+        if (magazine <= 0L) {
+          isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
           boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, (long)period, player);
           player.sendMessage("reload");
         } 

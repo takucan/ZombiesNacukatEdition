@@ -83,6 +83,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         totalbulletsMaterial.put(Material.GOLDEN_SHOVEL,new Integer[]{240,288,312,336});
         totalbulletsMaterial.put(Material.FLINT_AND_STEEL,new Integer[]{20,30,36,42});
         totalbulletsMaterial.put(Material.IRON_HOE,new Integer[]{65,80});
+        totalbulletsMaterial.put(Material.WOODEN_HOE,new Integer[]{300,450});
     }
     public static boolean inGame = false;
     public static HashMap<Integer,Integer> totalBullets = new HashMap<>();
@@ -109,6 +110,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         guns.add(Material.GOLDEN_PICKAXE);
         guns.add(Material.FLINT_AND_STEEL);
         guns.add(Material.IRON_HOE);
+        guns.add(Material.WOODEN_HOE);
     }
     public static int currentWave = 0;
     @Override

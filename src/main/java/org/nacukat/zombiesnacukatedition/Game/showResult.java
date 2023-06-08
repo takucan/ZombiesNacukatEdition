@@ -1,8 +1,11 @@
 package org.nacukat.zombiesnacukatedition.Game;
 
 import net.kyori.adventure.text.Component;
+import org.bukkit.ChatColor;
+import org.bukkit.Color;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -85,6 +88,9 @@ public class showResult {
                     case 4:
                         str2 = str2+" §7/ §fS§7G§f: §a"+gunclick;
                         break;
+                    case 5:
+                        str4 = str4+" §7/ "+ Color.fromBGR(139,69,19) +"Pistol§f: §a"+gunclick;
+                        break;
                 }
                 i++;
             }
@@ -112,6 +118,9 @@ public class showResult {
                         break;
                     case 4:
                         str3 = str3+" §7/ §fS§7G§f: §a"+gunshoot;
+                        break;
+                    case 5:
+                        str3 = str3+" §7/ "+ Color.fromBGR(139,69,19) +"Pistol§f: §a"+gunshoot;
                         break;
                 }
                 i1++;

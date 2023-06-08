@@ -114,6 +114,18 @@ public class invokeGun implements Listener {
                             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
                         }
                     }
+                    if (item.getType().equals(Material.WOODEN_HOE)) {
+                        Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
+                        if (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).equals(Integer.valueOf(0))) {
+                            itemMeta.setDisplayName("§6§lPistol Ultimate");
+                            Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1500);
+                            item.setItemMeta(itemMeta);
+                            Ultimates.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(1));
+                            item.addItemFlags(new ItemFlag[] { ItemFlag.HIDE_ENCHANTS });
+                            item.addEnchantment(Enchantment.getByKey(NamespacedKey.minecraft("unbreaking")), 1);
+                            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0F, 1.0F);
+                        }
+                    }
                     if (item.getType().equals(Material.FLINT_AND_STEEL)) {
                         Ultimates.putIfAbsent(Integer.valueOf(item.getItemMeta().getCustomModelData()), Integer.valueOf(0));
                         switch (((Integer)Ultimates.get(Integer.valueOf(item.getItemMeta().getCustomModelData()))).intValue()) {
@@ -271,14 +283,14 @@ public class invokeGun implements Listener {
             }
         }
 
-        if(!action.isRightClick()||!(item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
+        if(!action.isRightClick()||!(item.getType().equals(Material.WOODEN_HOE) ||item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
 
         ItemMeta meta = item.getItemMeta();
         HasQF.putIfAbsent(player.getName(),false);
         HasFB.putIfAbsent(player.getName(),false);
         isCounting.putIfAbsent(player.getUniqueId(),false);
         if(isCounting.get(player.getUniqueId())&&guns.contains(player.getInventory().getItemInMainHand().getType())){
-            gunClicks.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L)));
+            gunClicks.putIfAbsent(player.getUniqueId(),new ArrayList<>(Arrays.asList(0L,0L,0L,0L,0L,0L)));
             List<Long> gunClickList = new ArrayList<>(gunClicks.get(player.getUniqueId()));
             gunClickList.set(guns.indexOf(player.getInventory().getItemInMainHand().getType()),gunClickList.get(guns.indexOf(player.getInventory().getItemInMainHand().getType()))+1);
             gunClicks.put(player.getUniqueId(),gunClickList);
@@ -303,6 +315,9 @@ public class invokeGun implements Listener {
                     break;
                 case IRON_HOE:
                     meta.setDisplayName("§6Shotgun");
+                    break;
+                case WOODEN_HOE:
+                    meta.setDisplayName("§6Pistol");
             }
             item.setItemMeta(meta);
         }
@@ -329,6 +344,9 @@ public class invokeGun implements Listener {
                 break;
             case IRON_HOE:
                 new ShotGun().shotgun(lastShotTimes,isReloading,magazines,player,item);
+                break;
+            case WOODEN_HOE:
+                new Pistol().Pistol(lastShotTimes,isReloading,magazines,player,item);
             default:
         }
 

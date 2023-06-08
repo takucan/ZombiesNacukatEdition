@@ -33,7 +33,7 @@ public class playerAnimation implements Listener {
             new LeftLightningRod().lightningRod(player);
             return;
         }
-        if (item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)) {
+        if (item.getType().equals(Material.WOODEN_HOE) ||item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)) {
 
             if (!meta.hasCustomModelData()) {
                 Random random = new Random();
@@ -54,6 +54,9 @@ public class playerAnimation implements Listener {
                         break;
                     case IRON_HOE:
                         meta.setDisplayName("§6Shotgun");
+                        break;
+                    case WOODEN_HOE:
+                        meta.setDisplayName("§Pistol");
                         break;
                 }
                 item.setItemMeta(meta);
@@ -133,6 +136,12 @@ public class playerAnimation implements Listener {
                         (new reload()).reloadGun(item, isReloading, magazines, 5L, 30, player);
                     } else {
                         (new reload()).reloadGun(item, isReloading, magazines, 5L, 20, player);
+                    }
+                if (item.getType() == Material.WOODEN_HOE && !(Boolean) isReloading.get(item.getItemMeta().getCustomModelData()))
+                    if (Ultimates.get(item.getItemMeta().getCustomModelData()) == 0) {
+                        (new reload()).reloadGun(item, isReloading, magazines, 10L, 30, player);
+                    } else {
+                        (new reload()).reloadGun(item, isReloading, magazines, 14L, 20, player);
                     }
             }
         }

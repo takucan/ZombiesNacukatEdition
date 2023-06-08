@@ -30,7 +30,7 @@ public class RainbowRifle {
         double damage = 6.0D;
         double period = 30.0D;
         int burst = 2;
-        Long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
+        Long lastShotTime = lastShotTimes.get(item);
         long currentTime = System.currentTimeMillis();
         Long magazine = magazines.get(item.getItemMeta().getCustomModelData());
         switch (Ultimates.get(item.getItemMeta().getCustomModelData())) {
