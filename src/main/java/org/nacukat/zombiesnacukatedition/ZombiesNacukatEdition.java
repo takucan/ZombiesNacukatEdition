@@ -21,6 +21,7 @@ import org.nacukat.zombiesnacukatedition.Listeners.PlayerEvent;
 import org.nacukat.zombiesnacukatedition.Listeners.RemoveDropItem;
 import org.nacukat.zombiesnacukatedition.Shops.getShopCommend;
 import org.nacukat.zombiesnacukatedition.Shops.shopListener;
+import org.nacukat.zombiesnacukatedition.Shops.teamMachineGUI;
 import org.nacukat.zombiesnacukatedition.comands.*;
 import org.nacukat.zombiesnacukatedition.Game.Doors.openingDoor;
 
@@ -136,6 +137,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new invokeGun(),this);
         getServer().getPluginManager().registerEvents(new playerAnimation(),this);
         getServer().getPluginManager().registerEvents(new shopListener(),this);
+        getServer().getPluginManager().registerEvents(new teamMachineGUI(),this);
         getServer().getPluginManager().registerEvents(new PlayerEvent(),this);
         getServer().getPluginManager().registerEvents(new RemoveDropItem(),this);
         getServer().getPluginManager().registerEvents(new openingDoor(),this);

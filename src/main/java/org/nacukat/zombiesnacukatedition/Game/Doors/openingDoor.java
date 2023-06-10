@@ -9,6 +9,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,7 +26,15 @@ public class openingDoor implements Listener {
         Action action = e.getAction();
         Player player = e.getPlayer();
         ItemStack item = player.getInventory().getItemInMainHand();
+
         if (action.equals(Action.RIGHT_CLICK_BLOCK)&&currentMap != null) {
+            Location tmLoc = new Location(player.getWorld(),node.get("Maps").get(currentMap).get("teamMachine").get(0).asInt(),node.get("Maps").get(currentMap).get("teamMachine").get(1).asInt(),node.get("Maps").get(currentMap).get("teamMachine").get(2).asInt());
+            if(e.getClickedBlock().getLocation().equals(tmLoc)){
+                Inventory inventory = Bukkit.createInventory(player,9*3,"Team Machine");
+                inventory.setItem(10,new ItemStack(Material.ARROW));
+                player.openInventory(inventory);
+                return;
+            }
             for (JsonNode door : node.get("Maps").get(currentMap).get("Doors")){
                 JsonNode position = door.get("position");
 
@@ -45,22 +54,23 @@ public class openingDoor implements Listener {
                 int maxZ = Math.max(point1.getBlockZ(), point2.getBlockZ());
                 isOpened.putIfAbsent(door.get("name").asText(),false);
                 if (x >= minX && x <= maxX && y >= minY && y <= maxY && z >= minZ && z <= maxZ&&Gold.get(player.getUniqueId())>=door.get("price").asInt()&&!isOpened.get(door.get("name").asText())) {
-                        e.setCancelled(true);
-                        isOpened.put(door.get("name").asText(),true);
-                        Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-door.get("price").asInt());
-                        player.playSound(player, Sound.BLOCK_IRON_DOOR_OPEN,1F,1.5F);
-                        for (int x1 = minX; x1 <= maxX; x1++) {
-                            for (int y1 = minY; y1 <= maxY; y1++) {
-                                for (int z1 = minZ; z1 <= maxZ; z1++) {
-                                    Block block = world.getBlockAt(x1, y1, z1);
-                                    block.setType(Material.AIR);
-                                }
+                    e.setCancelled(true);
+                    isOpened.put(door.get("name").asText(),true);
+                    Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-door.get("price").asInt());
+                    player.playSound(player, Sound.BLOCK_IRON_DOOR_OPEN,1F,1.5F);
+                    for (int x1 = minX; x1 <= maxX; x1++) {
+                        for (int y1 = minY; y1 <= maxY; y1++) {
+                            for (int z1 = minZ; z1 <= maxZ; z1++) {
+                                Block block = world.getBlockAt(x1, y1, z1);
+                                block.setType(Material.AIR);
                             }
                         }
-                        String[] rooms = door.get("name").asText().split("-");
-                        for (String room : rooms){
-                            openedDoors.put(room,true);
-                        }
+                    }
+                    String[] rooms = door.get("name").asText().split("-");
+                    for (String room : rooms){
+                        openedDoors.put(room,true);
+                    }
+                    return;
                 }
 
             }

@@ -1,25 +1,18 @@
 package org.nacukat.zombiesnacukatedition.Game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.bukkit.scoreboard.Criteria;
-import org.bukkit.scoreboard.Objective;
-import org.bukkit.scoreboard.Scoreboard;
-import org.bukkit.scoreboard.ScoreboardManager;
-import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
-import static org.nacukat.zombiesnacukatedition.Game.Doors.openingDoor.isOpened;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 public class StartGame {
     public static int currentRound = 0;
