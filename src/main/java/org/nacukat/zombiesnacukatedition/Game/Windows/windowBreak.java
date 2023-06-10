@@ -26,7 +26,7 @@ public class windowBreak{
             Location point2 = new Location(Bukkit.getWorld("world"),window.get("window").get(1).get(0).asInt(),window.get("window").get(1).get(1).asInt(),window.get("window").get(1).get(2).asInt());
             Location point3 = new Location(Bukkit.getWorld("world"),window.get("window").get(2).get(0).asDouble(),window.get("window").get(2).get(1).asDouble(),window.get("window").get(2).get(2).asDouble());
             // 範囲内にいるかチェックする
-            if(!point3.getNearbyLivingEntities(1,livingEntity -> livingEntity.getType() != EntityType.PLAYER).isEmpty()){
+            if(!point3.getNearbyLivingEntities(1.5,livingEntity -> livingEntity.getType() != EntityType.PLAYER).isEmpty()){
 
                     // 範囲内にいる場合はランダムなブロックを壊す
                     destroyRandomBlock(point1,point2);

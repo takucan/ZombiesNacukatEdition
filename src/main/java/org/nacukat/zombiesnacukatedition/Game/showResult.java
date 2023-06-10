@@ -2,8 +2,10 @@ package org.nacukat.zombiesnacukatedition.Game;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.md_5.bungee.api.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -15,6 +17,7 @@ public class showResult {
             player.sendActionBar(Component.text("§bEnded!"));
             isCounting.put(player.getUniqueId(),false);
             player.sendMessage(Component.text("§a-----------------------"));
+            if(time != 0)player.sendMessage("Time: §a"+String.format("%02d", (time /60))+":"+String.format("%02d", (time %60)));
             StringBuilder str = new StringBuilder("§e§lスロットを保持していた時間§r§7>> §a");
 
             {
@@ -76,7 +79,7 @@ public class showResult {
                     case 2 -> str2.append(" §7/ §6GD§f: §a").append(gunclick);
                     case 3 -> str21.append(" §7/ §fD§7B§8S§f: §a").append(gunclick);
                     case 4 -> str21.append(" §7/ §fS§7G§f: §a").append(gunclick);
-                    case 5 ->str21.append(" §7/ ").append(TextColor.color(201, 127, 71)).append("Pis§f: §a").append(gunclick);
+                    case 5 ->str21.append(" §7/ ").append(ChatColor.of(new Color(201, 127, 71))).append("Pis§f: §a").append(gunclick);
                 }
                 i++;
             }
@@ -97,7 +100,7 @@ public class showResult {
                     case 2 -> str3.append(" §7/ §6GD§f: §a").append(gunshoot);
                     case 3 -> str31.append(" §7/ §fD§7B§8S§f: §a").append(gunshoot);
                     case 4 -> str31.append(" §7/ §fS§7G§f: §a").append(gunshoot);
-                    case 5 ->str31.append(" §7/ ").append(TextColor.color(201, 127, 71)).append("Pis§f: §a").append(gunshoot);
+                    case 5 ->str31.append(" §7/ ").append(ChatColor.of(new Color(201, 127, 71))).append("Pis§f: §a").append(gunshoot);
                 }
                 i1++;
             }

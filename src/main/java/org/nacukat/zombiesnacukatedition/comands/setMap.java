@@ -25,6 +25,7 @@ import org.nacukat.zombiesnacukatedition.Game.Windows.windowBreak;
 import java.awt.*;
 import java.util.List;
 
+import static org.nacukat.zombiesnacukatedition.Game.Doors.openingDoor.isOpened;
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
 public class setMap implements CommandExecutor {
@@ -33,6 +34,8 @@ public class setMap implements CommandExecutor {
         if(strings.length==0)return false;
         if (node.get("Maps").get(strings[0])!= null){
             currentMap = strings[0];
+            openedDoors.clear();
+            isOpened.clear();
             new setWindows().set();
             new BukkitRunnable() {
                 @Override
@@ -81,9 +84,9 @@ public class setMap implements CommandExecutor {
             }
             for (JsonNode window : node.get("Maps").get(currentMap).get("Windows")){
                 Location location = new Location(Bukkit.getWorld("world"),window.get("spawnPoint").get(0).asDouble(),window.get("spawnPoint").get(1).asDouble(),window.get("spawnPoint").get(2).asDouble());
-                new setSpawnPoints().setStand(location,true);
+                new setSpawnPoints().setStand(location,true,window.get("Door").asText());
                 Location armlocation = new Location(Bukkit.getWorld("world"),window.get("window").get(3).get(0).asDouble(),window.get("window").get(3).get(1).asDouble(),window.get("window").get(3).get(2).asDouble());
-                new setSpawnPoints().setStand(armlocation,false);
+                new setSpawnPoints().setStand(armlocation,false,"");
             }
             for (JsonNode shop : node.get("Maps").get(currentMap).get("Shops")){
                 Location location = new Location(Bukkit.getWorld("world"),shop.get("position").get(0).asDouble(),shop.get("position").get(1).asDouble(),shop.get("position").get(2).asDouble());
@@ -100,6 +103,7 @@ public class setMap implements CommandExecutor {
                         en.setHealth(0);
                     }
                 }
+                openedDoors.put(node.get("Maps").get(currentMap).get("SpawnRoom").asText(),true);
 
                 ArmorStand shopStand = (ArmorStand) Bukkit.getWorld("world").spawnEntity(location1,EntityType.ARMOR_STAND);
                 shopStand.setGravity(false);
@@ -119,6 +123,20 @@ public class setMap implements CommandExecutor {
                         Entity entity = Bukkit.getWorld("world").dropItem(location,new ItemStack(Material.valueOf(shop.get("item").asText())));
                         entity.setVelocity(new Vector(0,0,0));
                         entity.setGravity(false);
+                        break;
+                    case "perks":
+                        shopStand.setMetadata("perk",new FixedMetadataValue(plugin,shop.get("perk").asText()));
+                        shopStand.setSmall(true);
+                        Material material = Material.GLASS;
+                        switch (shop.get("perk").asText()){
+                            case "EH"->material = Material.GOLD_NUGGET;
+                            case "FB"->material = Material.GHAST_TEAR;
+                            case "QF"->material = Material.REDSTONE;
+                            case "FR"->material = Material.COOKIE;
+                        }
+                        Entity entity1 = Bukkit.getWorld("world").dropItem(location,new ItemStack(material));
+                        entity1.setVelocity(new Vector(0,0,0));
+                        entity1.setGravity(false);
                         break;
                     case "tops":
                         shopStand.setMetadata("met",new FixedMetadataValue(plugin,shop.get("item").get(0).asText()));

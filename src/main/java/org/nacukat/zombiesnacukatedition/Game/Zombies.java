@@ -20,11 +20,11 @@ import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 public class Zombies {
     public void spawnZombie(int num){
         List<LivingEntity> nearbyPoints = new ArrayList<>();
-        for (Player player : Bukkit.getWorld("world").getPlayers()){
-            nearbyPoints.addAll(player.getLocation().getNearbyLivingEntities(50,4,livingEntity -> livingEntity instanceof ArmorStand&&livingEntity.getMetadata("spawn").get(0).asBoolean()));
+        for (Player player : Bukkit.getOnlinePlayers()){
+            nearbyPoints.addAll(player.getEyeLocation().getNearbyLivingEntities(50,2,livingEntity -> livingEntity instanceof ArmorStand&&livingEntity.getMetadata("spawn").get(0).asBoolean()));
 
         }
-
+        nearbyPoints.removeIf(livingEntity -> !openedDoors.getOrDefault(livingEntity.getMetadata("Door").get(0).asString(),false));
         JsonNode info = node.get("Zombies").get(num);
         Random random = new Random();
 

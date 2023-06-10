@@ -99,7 +99,7 @@ public class rayTrace {
                         livingEntity.setMaximumNoDamageTicks(0);
                     }
                     player.sendMessage(hitmessage);
-                    if (!Arrays.asList(bosses).contains(Objects.requireNonNull(livingEntity.customName()).toString())) {
+                    if (!Arrays.asList(bosses).contains(livingEntity.getCustomName())) {
                         livingEntity.damage(damage, player);
                         Vector velocity = player.getLocation().getDirection().multiply(knockBack);
                         livingEntity.setVelocity(velocity);
@@ -110,6 +110,6 @@ public class rayTrace {
                 }
             }
 
-            return (LivingEntity) Objects.requireNonNull(rayTraceResult).getHitEntity();
+            return (LivingEntity) rayTraceResult.getHitEntity();
         }
 }

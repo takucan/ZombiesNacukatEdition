@@ -5,6 +5,7 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -18,7 +19,6 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 import org.nacukat.zombiesnacukatedition.Game.Windows.checkIsWindowBreak;
@@ -47,17 +47,17 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onPlayerLogin(PlayerJoinEvent e) {
         Player player = e.getPlayer();
-        isDown.put(player, Boolean.valueOf(false));
+        isDown.put(player, Boolean.FALSE);
         showParticle.putIfAbsent(player,true);
         player.sendMessage(String.valueOf(Kills.keySet()) + Kills.keySet());
         ScoreboardManager manager = Bukkit.getScoreboardManager();
         Scoreboard scoreboard = manager.getMainScoreboard();
         Objective objective = scoreboard.getObjective("ZombiesKills");
-        objective.setDisplaySlot(DisplaySlot.PLAYER_LIST);
+        Objects.requireNonNull(objective).setDisplaySlot(DisplaySlot.PLAYER_LIST);
         for (Player player1 : Bukkit.getServer().getOnlinePlayers()) {
-            Kills.putIfAbsent(player1.getName(), Long.valueOf(0L));
+            Kills.putIfAbsent(player1.getName(), 0L);
             Score score = objective.getScore(player1);
-            score.setScore(Math.toIntExact((Kills.get(player1.getName())).longValue()));
+            score.setScore(Math.toIntExact(Kills.get(player1.getName())));
             player1.setScoreboard(scoreboard);
         }
     }
@@ -65,7 +65,16 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onPlayerDied(PlayerDeathEvent e) {
         Player player = e.getPlayer();
-        isDown.put(player, Boolean.valueOf(true));
+        isDown.put(player, Boolean.TRUE);
+        List<LivingEntity> nearest = new ArrayList<>();
+        nearest.addAll(player.getLocation().getNearbyLivingEntities(20,livingEntity -> !livingEntity.getMetadata("Door").isEmpty()));
+        nearest.sort(Comparator.comparingDouble(player1 -> player1.getLocation().distance(player.getLocation())));
+
+        Bukkit.broadcastMessage(ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
+        for (Player player1 :Bukkit.getOnlinePlayers()){
+            player1.sendTitle(ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString(),"");
+            player1.playSound(player1.getLocation(),Sound.ENTITY_ENDER_DRAGON_AMBIENT,1,0.9F);
+        }
         Location diedLocation = player.getLocation().subtract(0.0D, 1.0D, 0.0D);
         Entity sittingArrow = player.getWorld().spawnEntity(diedLocation, EntityType.ARROW);
         player.setHealth(player.getMaxHealth());
@@ -89,8 +98,8 @@ public class PlayerEvent implements Listener {
 
     @EventHandler
     public void onInventoryMove(InventoryClickEvent e) {
-        isDown.putIfAbsent((Player)e.getView().getPlayer(), Boolean.valueOf(false));
-        if (isDown.get(e.getView().getPlayer()).booleanValue())
+        isDown.putIfAbsent((Player)e.getView().getPlayer(), Boolean.FALSE);
+        if (isDown.get(e.getView().getPlayer()))
             e.setCancelled(true);
     }
     @EventHandler
@@ -124,11 +133,14 @@ public class PlayerEvent implements Listener {
 //        }
         if (player.getInventory().getItem(e.getNewSlot()) == null)return;
         ItemStack item = player.getInventory().getItem(e.getNewSlot());
-        if(!item.hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.WOODEN_HOE) ||item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
+        if(!Objects.requireNonNull(item).hasItemMeta()||!item.getItemMeta().hasCustomModelData()||!(item.getType().equals(Material.WOODEN_HOE) ||item.getType().equals(Material.IRON_HOE) ||item.getType().equals(Material.DIAMOND_PICKAXE) || item.getType().equals(Material.GOLDEN_PICKAXE) || item.getType().equals(Material.GOLDEN_SHOVEL) || item.getType().equals(Material.FLINT_AND_STEEL)))return;
 
         Ultimates.putIfAbsent(item.getItemMeta().getCustomModelData(),0);
 
         totalBullets.putIfAbsent(item.getItemMeta().getCustomModelData(),totalbulletsMaterial.get(item.getType())[Ultimates.get(item.getItemMeta().getCustomModelData())]);
+
+        if(totalBullets.get(item.getItemMeta().getCustomModelData())<0)
+            totalBullets.put(item.getItemMeta().getCustomModelData(),0);
         player.setExp(1);
         player.setLevel(totalBullets.get(item.getItemMeta().getCustomModelData()));
     }
@@ -191,7 +203,7 @@ public class PlayerEvent implements Listener {
                                             for (int x = (int) minX; x <= maxX; x++) {
                                                 for (int y = (int) minY; y <= maxY; y++) {
                                                     for (int z = (int) minZ; z <= maxZ; z++) {
-                                                        Block block = world.getBlockAt(x, y, z);
+                                                        Block block = Objects.requireNonNull(world).getBlockAt(x, y, z);
                                                         if (block.getType() == Material.AIR) {
 
                                                             blocks.add(block);
@@ -238,14 +250,14 @@ public class PlayerEvent implements Listener {
 
 
         double count = 15.0;
-        HasFR.putIfAbsent(player.getName(), Boolean.valueOf(false));
+        HasFR.putIfAbsent(player.getName(), Boolean.FALSE);
         if (HasFR.get(player.getName())) count = 3.0D;
 
-        isDown.putIfAbsent(player, Boolean.valueOf(false));
-        this.playerRevivingStatus.putIfAbsent(player, Boolean.valueOf(false));
-        this.Count.putIfAbsent(player, Double.valueOf(count));
+        isDown.putIfAbsent(player, Boolean.FALSE);
+        this.playerRevivingStatus.putIfAbsent(player, Boolean.FALSE);
+        this.Count.putIfAbsent(player, count);
 
-        if (isDown.get(player).booleanValue()) {
+        if (isDown.get(player)) {
             e.setCancelled(true);
         } else  {
             final double finalCount = count;
@@ -257,53 +269,53 @@ public class PlayerEvent implements Listener {
                     if (player.isSneaking() && !isDown.get(player)) {
                         List<Player> players = new ArrayList<>(player.getLocation().getNearbyPlayers(3.0D));
                         players.sort(Comparator.comparingDouble(player1 -> player1.getLocation().distance(player.getLocation())));
-                        if (!playerRevivingStatus.get(player).booleanValue()) {
+                        if (!playerRevivingStatus.get(player)) {
                             players.sort(Comparator.comparingDouble(player1 -> player1.getLocation().distance(player.getLocation())));
                             for (int i = 1; i < players.size(); i++) {
-                                isDown.putIfAbsent(players.get(i), Boolean.valueOf(false));
-                                if (isDown.get(players.get(i)).booleanValue() && !playerRevivingWhom.containsValue(players.get(i))) {
+                                isDown.putIfAbsent(players.get(i), Boolean.FALSE);
+                                if (isDown.get(players.get(i)) && !playerRevivingWhom.containsValue(players.get(i))) {
                                     playerRevivingWhom.put(player, players.get(i));
-                                    playerRevivingStatus.put(player, Boolean.valueOf(true));
+                                    playerRevivingStatus.put(player, Boolean.TRUE);
                                 }
                             }
                         } else if (players.contains(playerRevivingWhom.get(player))) {
-                            if (isDown.get(playerRevivingWhom.get(player)).booleanValue())
+                            if (isDown.get(playerRevivingWhom.get(player)))
                                 if (player.getLocation().distance(playerRevivingWhom.get(player).getLocation()) <= 3.0D && player.isSneaking()) {
-                                    if (Count.get(player).doubleValue() > 0.0D) {
+                                    if (Count.get(player) > 0.0D) {
                                         playerRevivingWhom.get(player).sendActionBar("§b" + player.getName() + " §ais Reviving you §7- §c" + Count.get(player).doubleValue() / 10.0D + "s");
                                         player.sendActionBar("§aReviving §b" + playerRevivingWhom.get(player).getName() + " §7- §c" + Count.get(player).doubleValue() / 10.0D + "s");
-                                        Count.put(player, Double.valueOf(Count.get(player).doubleValue() - 1.0D));
+                                        Count.put(player, Count.get(player) - 1.0D);
                                     } else {
                                         Bukkit.broadcastMessage("§b" + player.getName() + " §eRevived §b" + playerRevivingWhom.get(player).getName());
-                                        isDown.replace(playerRevivingWhom.get(player), Boolean.valueOf(false));
+                                        isDown.replace(playerRevivingWhom.get(player), Boolean.FALSE);
                                         playerRevivingWhom.get(player).setHealth(playerRevivingWhom.get(player).getMaxHealth() / 2.0D);
                                         playerRevivingWhom.get(player).leaveVehicle();
                                         playerRevivingWhom.get(player).teleport(playerRevivingWhom.get(player).getEyeLocation());
                                         playerRevivingWhom.get(player).setInvisible(false);
                                         playerRevivingWhom.get(player).setGameMode(GameMode.ADVENTURE);
                                         playerRevivingWhom.remove(player);
-                                        playerRevivingStatus.put(player, Boolean.valueOf(false));
+                                        playerRevivingStatus.put(player, Boolean.FALSE);
                                         player.sendActionBar("§aRevived");
-                                        Count.put(player, Double.valueOf(finalCount));
+                                        Count.put(player, finalCount);
                                     }
                                 } else {
                                     playerRevivingWhom.get(player).sendActionBar(" ");
                                     player.sendActionBar(" ");
                                     playerRevivingWhom.remove(player);
-                                    playerRevivingStatus.put(player, Boolean.valueOf(false));
-                                    Count.put(player, Double.valueOf(finalCount));
+                                    playerRevivingStatus.put(player, Boolean.FALSE);
+                                    Count.put(player, finalCount);
                                 }
                         } else {
                             playerRevivingWhom.get(player).sendActionBar(" ");
                             player.sendActionBar(" ");
-                            Count.put(player, Double.valueOf(finalCount));
+                            Count.put(player, finalCount);
                             playerRevivingWhom.remove(player);
-                            playerRevivingStatus.put(player, Boolean.valueOf(false));
+                            playerRevivingStatus.put(player, Boolean.FALSE);
                         }
                     } else {
-                        Count.put(player, Double.valueOf(finalCount));
+                        Count.put(player, finalCount);
                         playerRevivingWhom.remove(player);
-                        playerRevivingStatus.put(player, Boolean.valueOf(false));
+                        playerRevivingStatus.put(player, Boolean.FALSE);
                     }
                 }
             }).runTaskTimer(plugin, 0L, 2L);

@@ -70,12 +70,8 @@ public class playerAnimation implements Listener {
                     int period = 60;
                     int clipAmmo = 2;
                     switch (Ultimates.get(item.getItemMeta().getCustomModelData())) {
-                        case 1, 2:
-                            period = 50;
-                            break;
-                        case 3:
-                            period = 46;
-                            break;
+                        case 1, 2 -> period = 50;
+                        case 3 -> period = 46;
                     }
                     new reload().reloadGun(item, isReloading, magazines, clipAmmo, period, player);
                 }
@@ -83,26 +79,26 @@ public class playerAnimation implements Listener {
                     int period = 30;
                     int clipAmmo = 7;
                     switch (Ultimates.get(item.getItemMeta().getCustomModelData())) {
-                        case 1:
+                        case 1 -> {
                             period = 28;
                             clipAmmo = 10;
-                            break;
-                        case 2:
+                        }
+                        case 2 -> {
                             period = 26;
                             clipAmmo = 13;
-                            break;
-                        case 3:
+                        }
+                        case 3 -> {
                             period = 24;
                             clipAmmo = 16;
-                            break;
-                        case 4:
+                        }
+                        case 4 -> {
                             period = 22;
                             clipAmmo = 20;
-                            break;
-                        case 5:
+                        }
+                        case 5 -> {
                             period = 20;
                             clipAmmo = 25;
-                            break;
+                        }
                     }
                     (new reload()).reloadGun(item, isReloading, magazines, clipAmmo, period, player);
                 }

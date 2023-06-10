@@ -2,6 +2,7 @@ package org.nacukat.zombiesnacukatedition;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -91,6 +92,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
 
     public static HashMap<Player,Boolean> showParticle = new HashMap<>();
     public static JsonNode node = null;
+    public static ObjectNode onode = null;
 
     public static HashMap<UUID,Integer> Gold = new HashMap<>();
 
@@ -100,6 +102,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
     public static HashMap<UUID,List<Long>> slotShoots = new HashMap<>();
     public static HashMap<UUID,List<Long>> slotClicks = new HashMap<>();
     public static HashMap<UUID,List<Long>> slotHolding = new HashMap<>();
+    public static HashMap<String, Boolean> openedDoors = new HashMap<>();
     public static HashMap<UUID,Long> damage = new HashMap<>();
     public static HashMap<UUID,Long> lastSlotChange = new HashMap<>();
     public static HashMap<UUID,Boolean> isCounting = new HashMap<>();
@@ -113,6 +116,7 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         guns.add(Material.WOODEN_HOE);
     }
     public static int currentWave = 0;
+    public static int time = 0;
     @Override
     public void onEnable() {
         for (Player player : Bukkit.getWorld("world").getPlayers()){
@@ -123,6 +127,8 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         File json = new File(getDataFolder()+"/Config.json");
         try {
             node = mapper.readTree(json);
+            onode = node.deepCopy();
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
@@ -140,6 +146,8 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         getCommand("setmap").setTabCompleter(new mapCompleter());
         getCommand("toggle-particles").setExecutor(new toggleParticle());
         getCommand("gold").setExecutor(new giveGold());
+        getCommand("ige").setExecutor(new ingameEditor());
+        getCommand("ige").setTabCompleter(new ingameEditorCOmpleter());
         getCommand("start").setExecutor(new start());
         getCommand("startCounting").setExecutor(new startCounting());
         getCommand("startCounting").setTabCompleter(new startCountingCompleter());
@@ -165,12 +173,11 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
         kills.setDisplaySlot(DisplaySlot.PLAYER_LIST);
         new BukkitRunnable(){
             final List<String> score = new ArrayList<>();
-            int time = 0;
             boolean sakkimade = false;
             @Override
             public void run() {
                 int i = 1;
-                int scoreNum = 10;
+                int scoreNum = 15;
                 for (String entry : scoreboard.getEntries()){
                     scoreboard.resetScores(entry);
                 }
@@ -212,17 +219,22 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                     Kills.putIfAbsent(player.getName(), Long.valueOf(0L));
 
                     kills.getScore(player).setScore(Math.toIntExact(Kills.get(player.getName())));
-                    objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId())).setScore(scoreNum);
-                    scoreNum--;
-                    score.add(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId()));
+                    if(isDown.getOrDefault(player,false)){
+                        objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+"§eREVIVE").setScore(scoreNum);
+                        scoreNum--;
+                        score.add(ChatColor.AQUA+player.getName()+"§f: "+"§eREVIVE");
+                    }else {
+                        objective.getScore(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId())).setScore(scoreNum);
+                        scoreNum--;
+                        score.add(ChatColor.AQUA+player.getName()+"§f: "+ChatColor.GOLD+Gold.get(player.getUniqueId()));
+                    }
+
 
 
                     i++;
 
                 }
 
-                if(!inGame)
-                    sakkimade = false;
                 objective.getScore(" ").setScore(scoreNum);
                 scoreNum--;
                 objective.getScore("Time: §a"+String.format("%02d", (time /60))+":"+String.format("%02d", (time %60))).setScore(scoreNum);
@@ -232,6 +244,8 @@ public final class ZombiesNacukatEdition extends JavaPlugin {
                     sakkimade = true;
                     time++;
                 }
+                if(!inGame)
+                    sakkimade = false;
 
                 objective.getScore("Map: §a"+currentMap).setScore(scoreNum);
                 scoreNum--;
