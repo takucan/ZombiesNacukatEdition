@@ -72,7 +72,7 @@ public class PlayerEvent implements Listener {
 
         Bukkit.broadcastMessage(ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
         for (Player player1 :Bukkit.getOnlinePlayers()){
-            player1.sendTitle(ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString(),"");
+            player1.sendTitle("",ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
             player1.playSound(player1.getLocation(),Sound.ENTITY_ENDER_DRAGON_AMBIENT,1,0.9F);
         }
         Location diedLocation = player.getLocation().subtract(0.0D, 1.0D, 0.0D);
@@ -99,7 +99,7 @@ public class PlayerEvent implements Listener {
     @EventHandler
     public void onInventoryMove(InventoryClickEvent e) {
         isDown.putIfAbsent((Player)e.getView().getPlayer(), Boolean.FALSE);
-        if (isDown.get(e.getView().getPlayer()))
+        if (isDown.get((Player) e.getWhoClicked()))
             e.setCancelled(true);
     }
     @EventHandler

@@ -165,6 +165,8 @@ public class invokeGun implements Listener {
                     }
                 }
 
+            }else {
+                player.sendMessage("§cゴールドが足りません");
             }
         }
     }

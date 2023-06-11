@@ -23,12 +23,12 @@ public class shopListener implements Listener {
     Player player = (Player)e.getWhoClicked();
     if (e.getView().getTitle().equals("Shop")) {
       e.setCancelled(true);
-      if (e.getClick().isLeftClick())
-        switch (e.getSlot()) {
-          case 10:
+      if (e.getClick().isLeftClick()&&e.getCurrentItem() != null)
+        switch (e.getCurrentItem().getType()) {
+          case DIAMOND_PICKAXE:
             player.getInventory().addItem(new ItemStack(Material.DIAMOND_PICKAXE));
             break;
-          case 28:
+          case REDSTONE:
             HasQF.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (!HasQF.get(player.getName()).booleanValue()) {
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
@@ -41,7 +41,7 @@ public class shopListener implements Listener {
             player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
             player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
             break;
-          case 30:
+          case GHAST_TEAR:
             HasFB.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (!HasFB.get(player.getName()).booleanValue()) {
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
@@ -54,7 +54,7 @@ public class shopListener implements Listener {
             player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
             player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
             break;
-          case 32:
+          case GOLD_NUGGET:
             EHs.putIfAbsent(player.getName(), 0);
             if (EHs.get(player.getName()) < 10) {
               EHs.put(player.getName(), EHs.get(player.getName())+1);
@@ -104,7 +104,7 @@ public class shopListener implements Listener {
             player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
             player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
             break;
-          case 34:
+          case COOKIE:
             HasFR.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (!HasFR.get(player.getName()).booleanValue()) {
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_TWINKLE, 1.0F, 1.0F);
@@ -118,9 +118,9 @@ public class shopListener implements Listener {
             player.sendMessage(ChatColor.YELLOW + "You already activated " + ChatColor.BLUE + "Fast Revive Perk" + ChatColor.YELLOW + "!");
             break;
         }  
-      if (e.getClick().isRightClick())
-        switch (e.getSlot()) {
-          case 28:
+      if (e.getClick().isRightClick()&&e.getCurrentItem() != null)
+        switch (e.getCurrentItem().getType()) {
+          case REDSTONE:
             HasQF.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (HasQF.get(player.getName()).booleanValue()) {
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
@@ -132,7 +132,7 @@ public class shopListener implements Listener {
             player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
             player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Quick Fire Perk" + ChatColor.YELLOW + "!");
             break;
-          case 30:
+          case GHAST_TEAR:
             HasFB.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (HasFB.get(player.getName()).booleanValue()) {
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
@@ -144,7 +144,7 @@ public class shopListener implements Listener {
             player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
             player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Frozen Bullet Perk" + ChatColor.YELLOW + "!");
             break;
-          case 32:
+          case GOLD_NUGGET:
             EHs.putIfAbsent(player.getName(),0);
             if(EHs.get(player.getName()) != 0){
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);
@@ -157,7 +157,7 @@ public class shopListener implements Listener {
             player.playSound(player, Sound.ENTITY_ENDERMAN_TELEPORT, 1.0F, 0.1F);
             player.sendMessage(ChatColor.YELLOW + "You are not activated " + ChatColor.BLUE + "Extra Health Perk" + ChatColor.YELLOW + "!");
             break;
-          case 34:
+          case COOKIE:
             HasFR.putIfAbsent(player.getName(), Boolean.valueOf(false));
             if (HasFR.get(player.getName()).booleanValue()) {
               player.playSound(player, Sound.ENTITY_FIREWORK_ROCKET_BLAST, 1.0F, 1.0F);

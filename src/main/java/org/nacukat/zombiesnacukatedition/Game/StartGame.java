@@ -1,6 +1,7 @@
 package org.nacukat.zombiesnacukatedition.Game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.EntityType;
@@ -54,6 +55,7 @@ public class StartGame {
                                             isDown.put(e.getKey(),false);
                                             e.getKey().teleport(e.getKey().getWorld().getSpawnLocation());
                                         }
+                                        ((Player) (livingEntity)).setGameMode(GameMode.ADVENTURE);
                                     }
                                     livingEntity.teleport(livingEntity.getWorld().getSpawnLocation());
                                 }
@@ -79,8 +81,9 @@ public class StartGame {
                             }
                             for (Map.Entry<Player, Boolean> e : isDown.entrySet()) {
                                 if (isDown.get(e.getKey())) {
-                                    isDown.put(e.getKey(),false);
+                                    isDown.put(e.getKey(), false);
                                     e.getKey().teleport(e.getKey().getWorld().getSpawnLocation());
+                                    e.getKey().setGameMode(GameMode.ADVENTURE);
                                 }
                             }
                             currentWave = 0;
@@ -108,6 +111,7 @@ public class StartGame {
                                             }
                                         }
                                         livingEntity.teleport(livingEntity.getWorld().getSpawnLocation());
+                                        ((Player) (livingEntity)).setGameMode(GameMode.ADVENTURE);
                                     }
                                 }
 

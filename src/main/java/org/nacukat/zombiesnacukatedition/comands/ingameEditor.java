@@ -104,17 +104,17 @@ public class ingameEditor implements CommandExecutor {
 
                         break;
                     case "break":
-                        editWindowLocs.add(player.getEyeLocation().getX());
-                        editWindowLocs.add(player.getEyeLocation().getY());
-                        editWindowLocs.add(player.getEyeLocation().getZ());
+                        editWindowLocs.add((double)Math.round(player.getEyeLocation().getX()*10)/10);
+                        editWindowLocs.add((double)Math.round(player.getEyeLocation().getY()*10)/10);
+                        editWindowLocs.add((double)Math.round(player.getEyeLocation().getZ()*10)/10);
 
                         editWindowArray.set(2,editWindowLocs);
 
                         break;
                     case "rep":
-                        editWindowLocs.add(player.getLocation().getX());
-                        editWindowLocs.add(player.getLocation().getY());
-                        editWindowLocs.add(player.getLocation().getZ());
+                        editWindowLocs.add((double)Math.round(player.getLocation().getX()*10)/10);
+                        editWindowLocs.add((double)Math.round(player.getLocation().getY()*10)/10);
+                        editWindowLocs.add((double)Math.round(player.getLocation().getZ()*10)/10);
 
                         editWindowArray.set(3,editWindowLocs);
 
@@ -123,9 +123,9 @@ public class ingameEditor implements CommandExecutor {
                         ObjectNode spawnPointItem = objectMapper.createObjectNode();
                         ArrayNode editSpawnPoint = objectMapper.createArrayNode();
 
-                        editSpawnPoint.add(player.getLocation().getX());
-                        editSpawnPoint.add(player.getLocation().getY());
-                        editSpawnPoint.add(player.getLocation().getZ());
+                        editSpawnPoint.add((double)Math.round(player.getLocation().getX()*10)/10);
+                        editSpawnPoint.add((double)Math.round(player.getLocation().getY()*10)/10);
+                        editSpawnPoint.add((double)Math.round(player.getLocation().getZ()*10)/10);
 
                         ObjectNode editSpawnPointArray = (ObjectNode) onode.path("Maps").path(currentMap).path("Windows").path(Integer.parseInt(strings[2]));
                         editSpawnPointArray.set("spawnPoint",editSpawnPoint);
