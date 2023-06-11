@@ -34,6 +34,6 @@ public class StartWave {
                     notSpawnedAll=false;
                 }
             }
-        }.runTaskTimer(plugin,200,200);
+        }.runTaskTimer(plugin,250,300);
     }
 }

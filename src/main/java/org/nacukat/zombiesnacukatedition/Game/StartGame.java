@@ -37,7 +37,7 @@ public class StartGame {
                     currentMap = null;
                     for (Player player : Bukkit.getWorld("world").getPlayers()){
                         player.playSound(player.getLocation(), Sound.ENTITY_ENDER_DRAGON_DEATH, 1.0F, 0.8F);
-                        player.sendTitle("§cGame Over!", "§7You made it to Round "+currentRound,10,100,20);
+                        player.sendTitle("§cGame Over!", "§7You made it to Round "+(currentRound+1),10,100,20);
                         player.sendMessage((count/20)+"s");
                         currentRound = 0;
                         inGame = false;
@@ -67,7 +67,7 @@ public class StartGame {
                 count++;
                 List<LivingEntity> arrayList = Bukkit.getWorld("world").getLivingEntities().stream().filter(livingEntity -> livingEntity.getType() != EntityType.PLAYER&&livingEntity.getType() != EntityType.ARMOR_STAND).toList();
 
-                if (!notSpawnedAll &&arrayList.size() == 0||count ==1){
+                if (!notSpawnedAll &&arrayList.size() == 0||count == 1){
                     if(currentRound+1< node.get("Maps").get(currentMap).get("TotalRound").asInt()){
 
                         if(count!=1) currentRound++;

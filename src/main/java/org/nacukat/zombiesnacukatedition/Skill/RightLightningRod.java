@@ -37,8 +37,8 @@ public class RightLightningRod {
             LightningStrike lightningStrike = player.getWorld().strikeLightningEffect(nearHitLoc.stream().toList().get(0).getLocation());
             int i = 0;
             for(LivingEntity entity :nearHitLoc){
-                entity.setKiller(player);
                 entity.damage(80);
+                entity.setKiller(player);
                 i++;
             }
             player.sendMessage("Hit "+i+" enemies");
@@ -47,8 +47,8 @@ public class RightLightningRod {
             LightningStrike lightningStrike = player.getWorld().strikeLightningEffect(nearHitLoc.stream().toList().get(0).getLocation());
             int i = 0;
             for(LivingEntity entity :nearHitLoc){
-                entity.setKiller(player);
                 entity.damage(80);
+                entity.setKiller(player);
                 i++;
             }
             player.sendMessage("Hit "+i+" enemies");

@@ -66,15 +66,19 @@ public class PlayerEvent implements Listener {
     public void onPlayerDied(PlayerDeathEvent e) {
         Player player = e.getPlayer();
         isDown.put(player, Boolean.TRUE);
-        List<LivingEntity> nearest = new ArrayList<>();
-        nearest.addAll(player.getLocation().getNearbyLivingEntities(20,livingEntity -> !livingEntity.getMetadata("Door").isEmpty()));
-        nearest.sort(Comparator.comparingDouble(player1 -> player1.getLocation().distance(player.getLocation())));
 
-        Bukkit.broadcastMessage(ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
-        for (Player player1 :Bukkit.getOnlinePlayers()){
-            player1.sendTitle("",ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
-            player1.playSound(player1.getLocation(),Sound.ENTITY_ENDER_DRAGON_AMBIENT,1,0.9F);
+        if (inGame) {
+            List<LivingEntity> nearest = new ArrayList<>();
+            Location l = new Location(player.getWorld(),player.getLocation().getX(),player.getLocation().getY()+2,player.getLocation().getZ());
+            nearest.addAll(l.getNearbyLivingEntities(20,2,livingEntity -> !livingEntity.getMetadata("Door").isEmpty()));
+            nearest.sort(Comparator.comparingDouble(player1 -> player1.getLocation().distance(player.getLocation())));
+            Bukkit.broadcastMessage(ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
+            for (Player player1 :Bukkit.getOnlinePlayers()){
+                player1.sendTitle("",ChatColor.AQUA+player.getName()+"§ewas knocked down in §a"+nearest.get(0).getMetadata("Door").get(0).asString());
+                player1.playSound(player1.getLocation(),Sound.ENTITY_ENDER_DRAGON_AMBIENT,1,0.9F);
+            }
         }
+
         Location diedLocation = player.getLocation().subtract(0.0D, 1.0D, 0.0D);
         Entity sittingArrow = player.getWorld().spawnEntity(diedLocation, EntityType.ARROW);
         player.setHealth(player.getMaxHealth());
@@ -94,6 +98,7 @@ public class PlayerEvent implements Listener {
                 }
             }
         }.runTaskTimer(plugin,5,20);
+        e.setCancelled(true);
     }
 
     @EventHandler
