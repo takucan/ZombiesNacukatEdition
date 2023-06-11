@@ -5,9 +5,11 @@ import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.spawnParticle;
 
-import java.util.*;
+import java.util.HashMap;
 
 import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
 
@@ -70,9 +72,10 @@ public class RainbowRifle {
                 new spawnParticle().rainbow(player);
 
                 new rayTrace().shoot(player,item,5,7,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
-                if (item.getAmount() > 1)
-                    item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//                if (item.getAmount() > 1)
+//                    item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
+                if(magazine > 0)item.setAmount((int) magazine);
                 magazines.put(item.getItemMeta().getCustomModelData(), magazine);
                 lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
                 if (magazine <= 0L) {
@@ -101,9 +104,10 @@ public class RainbowRifle {
                             new spawnParticle().rainbow(player);
 
                             new rayTrace().shoot(player,item,5,7,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
-                            if (item.getAmount() > 1)
-                                item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//                            if (item.getAmount() > 1)
+//                                item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                             magazine--;
+                            if(magazine > 0)item.setAmount((int) magazine);
                             magazines.put(item.getItemMeta().getCustomModelData(), magazine);
                             if (magazine <= 0L) {
                                 isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);

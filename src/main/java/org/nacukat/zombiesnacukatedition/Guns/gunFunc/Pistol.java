@@ -55,9 +55,10 @@ public class Pistol {
                 new spawnParticle().spawn(Particle.CRIT,null,player);
 
                 new rayTrace().shoot(player,item,10,15,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
-                if (item.getAmount() > 1)
-                    item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//                if (item.getAmount() > 1)
+//                    item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
+                if(magazine > 0)item.setAmount((int) magazine);
                 magazines.put(item.getItemMeta().getCustomModelData(), magazine);
                 lastShotTimes.put(item.getItemMeta().getCustomModelData(),currentTime);
                 if (magazine <= 0L) {
@@ -83,9 +84,10 @@ public class Pistol {
                             new spawnParticle().spawn(Particle.CRIT,null,player);
 
                             new rayTrace().shoot(player,item,10,15,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
-                            if (item.getAmount() > 1)
-                                item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//                            if (item.getAmount() > 1)
+//                                item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                             magazine = magazine - 1L;
+                            if(magazine > 0)item.setAmount((int) magazine);
                             magazines.put(item.getItemMeta().getCustomModelData(), magazine);
                             if (magazine <= 0L) {
                                 isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);

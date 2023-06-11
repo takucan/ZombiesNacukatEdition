@@ -1,6 +1,9 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
@@ -16,8 +19,8 @@ public class dbs {
 
     lastShotTimes.putIfAbsent(item.getItemMeta().getCustomModelData(),System.currentTimeMillis());
     long lastShotTime = lastShotTimes.get(item.getItemMeta().getCustomModelData());
-    Long magazine = magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData()));
     long clipSize = 2L;
+    long magazine = magazines.getOrDefault(Integer.valueOf(item.getItemMeta().getCustomModelData()),clipSize);
     long currentTime = System.currentTimeMillis();
     long damage = 7L;
     int period = 60;
@@ -41,19 +44,14 @@ public class dbs {
         break;
     } 
     if (HasQF.get(player.getName()).booleanValue())
-      fireRate = (long)(fireRate * 0.75D); 
-    if (magazine == null) {
-      magazine = Long.valueOf(clipSize);
-      magazines.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), magazine);
-      item.setAmount(Math.toIntExact(clipSize));
-    } 
-    if (magazine.longValue() <= 0L) {
+      fireRate = (long)(fireRate * 0.75D);
+    if (magazine <= 0L) {
       isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
       boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, period, player);
       player.sendMessage("reload");
     } 
-    if (magazine.longValue() > 0L) {
-      if (magazine.longValue() > clipSize) {
+    if (magazine > 0L) {
+      if (magazine > clipSize) {
         magazine = Long.valueOf(clipSize);
         item.setAmount((int)clipSize);
       } 
@@ -113,13 +111,14 @@ public class dbs {
             }
 
         } 
-        if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).longValue()) - 1);
-        magazine = Long.valueOf(magazine.longValue() - 1L);
-        magazines.put(Integer.valueOf(item.getItemMeta().getCustomModelData()), magazine);
-        lastShotTimes.put(item.getItemMeta().getCustomModelData(), Long.valueOf(currentTime));
-        if (magazine.longValue() <= 0L) {
-          isReloading.replace(Integer.valueOf(item.getItemMeta().getCustomModelData()), Boolean.valueOf(true));
+//        if (item.getAmount() > 1)
+//          item.setAmount(Math.toIntExact(magazines.get(Integer.valueOf(item.getItemMeta().getCustomModelData())).longValue()) - 1);
+        magazine = magazine - 1L;
+        if(magazine > 0)item.setAmount((int) magazine);
+        magazines.put(item.getItemMeta().getCustomModelData(), magazine);
+        lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
+        if (magazine <= 0L) {
+          isReloading.replace(item.getItemMeta().getCustomModelData(), Boolean.TRUE);
           boolean a = (new reload()).reloadGun(item, isReloading, magazines, clipSize, period, player);
           player.sendMessage("reload");
         } 

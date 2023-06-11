@@ -1,11 +1,18 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
-import org.bukkit.*;
-import org.bukkit.entity.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.EntityType;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.spawnParticle;
 
 import java.util.*;
 
@@ -79,9 +86,10 @@ public class ZombieZapper {
                     }
                 }
 
-                if (item.getAmount() > 1)
-                    item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//                if (item.getAmount() > 1)
+//                    item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
                 magazine = magazine - 1L;
+                if(magazine > 0)item.setAmount((int) magazine);
                 magazines.put(item.getItemMeta().getCustomModelData(), magazine);
                 lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
                 if (magazine <= 0L) {

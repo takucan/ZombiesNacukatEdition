@@ -101,9 +101,10 @@ public class ShotGun {
             }
 
         } 
-        if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//        if (item.getAmount() > 1)
+//          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
         magazine = magazine - 1L;
+        if(magazine > 0)item.setAmount((int) magazine);
         magazines.put(item.getItemMeta().getCustomModelData(), magazine);
         lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
         if (magazine <= 0L) {

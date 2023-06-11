@@ -31,6 +31,7 @@ public class teamMachineGUI implements Listener {
                         }
                         totalBullets.clear();
                         isReloading.clear();
+                        magazines.clear();
                         Gold.put(player.getUniqueId(),Gold.get(player.getUniqueId())-1000);
                         e.getView().close();
                     }else {

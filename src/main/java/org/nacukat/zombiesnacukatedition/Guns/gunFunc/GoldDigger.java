@@ -1,13 +1,19 @@
 package org.nacukat.zombiesnacukatedition.Guns.gunFunc;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.Color;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.*;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.rayTrace;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.reload;
+import org.nacukat.zombiesnacukatedition.Guns.gunFunc.other.spawnParticle;
 
-import java.util.*;
+import java.util.HashMap;
 
-import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.*;
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.HasQF;
+import static org.nacukat.zombiesnacukatedition.ZombiesNacukatEdition.Ultimates;
 
 public class GoldDigger {
   public boolean goldDigger(HashMap<Integer, Long> lastShotTimes, HashMap<Integer, Boolean> isReloading, HashMap<Integer, Long> magazines, Player player, ItemStack item) {
@@ -79,10 +85,11 @@ public class GoldDigger {
 
         new spawnParticle().spawn(particle,dustOptions,player);
         new rayTrace().shoot(player,item,10,15,damage,hitmessage,critmessage,knockBack,player.getEyeLocation().getDirection());
-
-        if (item.getAmount() > 1)
-          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
+//
+//        if (item.getAmount() > 1)
+//          item.setAmount(Math.toIntExact(magazines.get(item.getItemMeta().getCustomModelData())) - 1);
         magazine = magazine - 1L;
+        if(magazine > 0)item.setAmount((int) magazine);
         magazines.put(item.getItemMeta().getCustomModelData(), magazine);
         lastShotTimes.put(item.getItemMeta().getCustomModelData(), currentTime);
         if (magazine <= 0L) {
