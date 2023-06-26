@@ -1,0 +1,308 @@
+{
+    "Zombies": {
+
+        "ZOMBIE":{
+            "type": "ZOMBIE",
+            "Health": 20,
+            "Attack": 4,
+            "Speed": 0.3
+        }
+
+    },
+    "Maps": {
+        "DeadEnd": {
+            "locConnect": [
+            ],
+            "teamMachine": [
+                -40,
+                83,
+                51
+            ],
+            "SpawnRoom": "Alley",
+            "TotalRound": 1,
+            "Rounds": [
+                {
+                    "round": 1,
+                    "wavesInRound": 1,
+                    "waves": [
+                        {
+                            "Zombie": [
+                                ["ZOMBIE", 6]
+                            ]
+                        }
+                    ]
+                }
+            ],
+            "DoorFrom": [
+                [
+                    [7, 98, 19],
+                    [9, 101, 19]
+                ],
+                [
+                    [11, 98, 18],
+                    [11, 101, 16]
+                ],
+                [
+                    [11, 98, 18],
+                    [11, 102, 16]
+                ]
+            ],
+            "Doors": [
+                {
+                    "name": "Power Staion-Roof Top",
+                    "position": [-14, 82, 53],
+                    "opposite": [-14, 85, 55],
+                    "type": 1,
+                    "price": 1250
+                },{
+                    "name": "Alley-Hotel",
+                    "position": [11,68,20],
+                    "opposite": [11,71,22],
+                    "type": 1,
+                    "price": 750
+                },{
+                    "name": "Alley-Office",
+                    "position": [26,68,42],
+                    "opposite": [26,71,44],
+                    "type": 1,
+                    "price": 500
+                },{
+                    "name": "Hotel-Apart",
+                    "position": [6,75,3],
+                    "opposite": [8,78,3],
+                    "type": 0,
+                    "price": 750
+                },{
+                    "name": "Hotel-Garden",
+                    "position": [18,68,-8],
+                    "opposite": [16,71,-8],
+                    "type": 0,
+                    "price": 750
+                },{
+                    "name": "Office-Gallery",
+                    "position": [35,75,57],
+                    "opposite": [37,78,57],
+                    "type": 0,
+                    "price": 750
+                },{
+                    "name": "Gallery-Power Station",
+                    "position": [14,75,53],
+                    "opposite": [14,79,55],
+                    "type": 2,
+                    "price": 1000
+                },{
+                  "name": "Apart-Power Station",
+                  "position": [-9,76,28],
+                  "opposite": [-7,79,30],
+                  "type": 0,
+                  "price": 1000
+              }
+            ],
+            "Windows": [{
+                "Door":"Alley",
+                "spawnPoint":[6.5,69,31.5],
+                "window":[[10,70,26],[10,71,28],[9.5,70.5,27.5],[11.5,68,27.5]]
+              },{
+                "Door":"Alley",
+                "spawnPoint":[4.5,69,43.5],
+                "window":[[10,70,38],[10,71,40],[9.5,70.5,39.5],[11.5,68,39.5]]
+              },{
+                "Door":"Alley",
+                "spawnPoint":[42.5,70,29.5],
+                "window":[[37,71,24],[37,72,26],[38.5,71.5,25.5],[36.5,69,25.5]]
+              },{
+                "Door":"Alley",
+                "spawnPoint":[39.5,70,8.5],
+                "window":[[37,71,14],[35,72,14],[36.5,71.5,13.5],[36.5,69,15.5]]
+              },{
+                "Door":"Hotel",
+                "spawnPoint":[-0.5,68,46.5],
+                "window":[[-5,69,37],[-3,70,37],[-3.5,69.5,38.5],[-3.5,67,36.5]]
+              },{
+                "Door":"Hotel",
+                "spawnPoint":[-10.5,68,14.5],
+                "window":[[-6,69,18],[-8,70,18],[-6.5,69.5,17.5],[-6.5,67,19.5]]
+              },{
+                "Door":"Hotel",
+                "spawnPoint":[27.5,69,6.5],
+                "window":[[25,70,11],[25,71,9],[26.5,70.5,10.5],[24.5,68,10.5]]
+              },{
+                "Door":"Hotel",
+                "spawnPoint":[-25.5,69,-4.5],
+                "window":[[22,70,0],[22,71,-2],[23.5,70.5,-0.5],[21.5,68,-0.5]]
+              },{
+                "Door":"Hotel",
+                "spawnPoint":[-3.5,76,-21.5],
+                "window":[[1,77,-16],[-1,78,-16],[0.5,77.5,-16.5],[0.5,75,-14.5]]
+              },{
+                "Door":"Hotel",
+                "spawnPoint":[25.5,76,-5.5],
+                "window":[[20,77,0],[20,78,-2],[21.5,77.5,-0.5],[19.5,75,-0.5]]
+              },{
+                "Door":"Apart",
+                "spawnPoint":[19.5,76,9.5],
+                "window":[[14,77,7],[14,78,5],[15.5,77.5,6.5],[13.5,75,6.5]]
+              },{
+                "Door":"Apart",
+                "spawnPoint":[-15.5,76,15.5],
+                "window":[[-12,77,20],[-12,78,22],[-12.5,77.5,21.5],[-10.5,75,21.5]]
+              },{
+                "Door":"Apart",
+                "spawnPoint":[-4.5,76,62.5],
+                "window":[[1,77,59],[3,78,59],[2.5,77.5,60.5],[2.5,75,58.5]]
+              },{
+                "Door":"Apart",
+                "spawnPoint":[-13.5,76,51.5],
+                "window":[[-10,77,44],[-10,78,46],[-10.5,77.5,45.5],[-8.5,75,45.5]]
+              },{
+                "Door":"Power Station",
+                "spawnPoint":[3.5,83,62.5],
+                "window": [[-3,84,59],[-1,85,59],[-1.5,84.5,60.5],[-1.5,82,58.5]]
+              },{
+                "Door":"Power Station",
+                "spawnPoint":[-5.5,83,66.5],
+                "window":[[-11,84,59],[-9,85,59],[-9.5,84.5,60.5],[-9.5,82,58.5]]
+              },{
+                "Door":"Power Station",
+                "spawnPoint":[-2.4,83,32.5],
+                "window":[[3,84,36],[1,85,36],[2.5,84.5,35.5],[2.5,82,37.5]]
+              },{
+                "Door":"Roof Top",
+                "spawnPoint":[-15.5,83,64.5],
+                "window":[[-21,84,58],[-19,85,58],[-19.5,84.5,59.5],[-19.5,82,57.5]]
+              },{
+                "Door":"Roof Top",
+                "spawnPoint":[-12.5,83,33.5],
+                "window":[[-18,84,34],[-19,85,34],[-18.0,84.5,33.5],[-18.0,82,35.5]]
+              },{
+                "Door":"Roof Top",
+                "spawnPoint":[-37.5,83,25.5],
+                "window":[[-32,84,29],[-33,85,29],[-32.0,84.5,28.5],[-31.9, 82.1, 30.3]]
+              },{
+                "Door":"Roof Top",
+                "spawnPoint":[-49.5,83,38.5],
+                "window":[[-46,84,32],[-46,85,33],[-46.5,84.5,33.0],[-44.5,82,33.0]]
+              },{
+                "Door":"Gallery",
+                "spawnPoint":[30.5,76,54.5],
+                "window":[[27,77,51],[27,78,49],[28.5,77.5,50.5],[26.5,75,50.5]]
+              },{
+                "Door":"Gallery",
+                "spawnPoint":[14.5,76,64.5],
+                "window":[[19,77,63],[21,78,63],[20.5,77.5,64.5],[20.5,75,62.5]]
+              },{
+                "Door":"Gallery",
+                "spawnPoint":[22.5,76,77.5],
+                "window":[[25,77,70],[25,78,72],[24.5,77.5,71.5],[26.5,75,71.5]]
+              },{
+                "Door":"Office",
+                "spawnPoint":[57.5,76,64.5],
+                "window":[[51,77,58],[53,78,58],[52.5,77.5,59.5],[52.5,75,57.5]]
+              },{
+                "Door":"Office",
+                "spawnPoint":[52.5,76,31.5],
+                "window":[[48,77,34],[46,78,34],[47.5,77.5,33.5],[47.5,75,35.5]]
+              },{
+                "Door":"Office",
+                "spawnPoint":[42.5,76,26.5],
+                "window":[[41,77,34],[39,78,34],[40.5,77.5,33.5],[40.5,75,35.5]]
+              },{
+                "Door":"Garden",
+                "spawnPoint":[34.5,68,-16.5],
+                "window":[[30,69,-12],[30,70,-14],[31.5,69.5,-12.5],[29.5,67,-12.5]]
+              },{
+                "Door":"Garden",
+                "spawnPoint":[24.5,68,-33.5],
+                "window":[[28,69,-29],[26,70,-29],[27.5,69.5,-29.5],[27.5,67,-27.5]]
+              },{
+                "Door":"Garden",
+                "spawnPoint":[0.5,68,-16.5],
+                "window":[[4,69,-14],[4,70,-12],[3.5,69.5,-12.5],[5.5,67,-12.5]]
+              }
+            ],
+            "Ultimates": [
+                [16, 68, -32]
+            ],
+            "Shops": [
+                {
+                    "position": [45.5, 76, 46.5],
+                    "price": 75,
+                    "type": "bottoms",
+                    "item": ["LEATHER_LEGGINGS", "LEATHER_BOOTS"]
+                },
+                {
+                    "position": [-2.5, 75, -1.5],
+                    "price": 50,
+                    "type": "tops",
+                    "item": ["LEATHER_HELMET", "LEATHER_CHESTPLATE"]
+                },
+                {
+                    "position": [36.5, 75, 73.5],
+                    "price": 500,
+                    "type": "tops",
+                    "item": ["GOLD_HELMET", "GOLD_CHESTPLATE"]
+                },
+                {
+                    "position": [-4.5, 76, 58.5],
+                    "price": 750,
+                    "type": "bottoms",
+                    "item": ["IRON_LEGGINGS", "IRON_BOOTS"]
+                },
+                {
+                    "position": [-44.5, 82, 44.5],
+                    "price": 800,
+                    "type": "tops",
+                    "item": ["IRON_HELMET", "IRON_CHESTPLATE"]
+                },
+                {
+                    "position": [-3.5, 76.5, 35.5],
+                    "price": 1000,
+                    "type": "perks",
+                    "perk": "QF"
+                },
+                {
+                    "position": [-15.5, 82.5, 45.5],
+                    "price": 1000,
+                    "type": "perks",
+                    "perk": "EH"
+                },
+                {
+                    "position": [16.5, 75.5, -11.5],
+                    "price": 1000,
+                    "type": "perks",
+                    "perk": "FB"
+                },
+                {
+                    "position": [12.5, 67.5, 33.5],
+                    "price": 500,
+                    "type": "perks",
+                    "perk": "FR"
+                },
+                {
+                    "position": [56.5, 75.5, 41.5],
+                    "price": 500,
+                    "type": "gun",
+                    "item": "IRON_HOE"
+                },
+                {
+                    "position": [1.5, 75.5, 24.5],
+                    "price": 750,
+                    "type": "gun",
+                    "item": "WOOD_SPADE"
+                },
+                {
+                    "position": [3.5, 82.5, 58.5],
+                    "price": 900,
+                    "type": "gun",
+                    "item": "STONE_SPADE"
+                },
+                {
+                    "position": [-10.5, 67.5, 30.5],
+                    "price": 500,
+                    "type": "gun",
+                    "item": "STONE_HOE"
+                }
+            ]
+        }
+    }
+}
